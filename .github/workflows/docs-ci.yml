@@ -1,0 +1,94 @@
+name: Docs CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths:
+      - docs/**
+      - package.json
+      - package-lock.json
+      - .github/workflows/docs-ci.yml
+      - .github/workflows/docs-deploy.yml
+      - .github/pull_request_template.md
+  push:
+    branches:
+      - develop
+    paths:
+      - docs/**
+      - package.json
+      - package-lock.json
+      - .github/workflows/docs-ci.yml
+      - .github/workflows/docs-deploy.yml
+      - .github/pull_request_template.md
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  branch-policy:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch promotion flow
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$BASE_REF" == "develop" ]]; then
+            if [[ "$HEAD_REF" != feature/* && "$HEAD_REF" != hotfix/* ]]; then
+              echo "PRs para develop devem sair de feature/* ou hotfix/*."
+              exit 1
+            fi
+            exit 0
+          fi
+
+          if [[ "$BASE_REF" == "main" ]]; then
+            if [[ "$HEAD_REF" != "develop" ]]; then
+              echo "PRs para main devem sair da branch develop."
+              exit 1
+            fi
+            exit 0
+          fi
+
+          echo "Base branch nao suportada: $BASE_REF"
+          exit 1
+
+  build-docs:
+    runs-on: ubuntu-latest
+    needs:
+      - branch-policy
+    if: github.event_name != 'pull_request' || needs.branch-policy.result == 'success'
+    env:
+      DOCS_BASE_PATH: /backup-observability-gateway/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build docs
+        run: npm run docs:build
+
+      - name: Upload docs artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitepress-docs-${{ github.run_id }}
+          path: docs/.vitepress/dist
+          retention-days: 7
