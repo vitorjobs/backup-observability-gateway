@@ -175,6 +175,15 @@ npm run docs:preview
 
 A documentacao estilo Postman fica em `docs/postman.md`. A collection importavel fica em `docs/public/backup-observability-gateway.postman_collection.json`.
 
+## CI/CD da Documentacao
+
+O VitePress em `docs/` usa um fluxo `feature/* -> develop -> main`.
+
+- novas branches devem nascer de `main`
+- Pull Requests de trabalho entram em `develop`
+- a promocao final para deploy acontece com PR de `develop` para `main`
+- o GitHub Pages publica automaticamente no merge para `main`
+
 ## Referencias
 
 - Get All VM Backup Jobs: https://helpcenter.veeam.com/archive/one/120/rest/reference/one-rest-v22.html#tag/Veeam-Backup-and-Replication-Jobs/operation/VbrJobs_GetVmBackupJobs
