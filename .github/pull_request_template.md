@@ -1,8 +1,8 @@
 ## Fluxo esperado
 
 - [ ] Esta branch nasceu da `main`
-- [ ] O PR aponta para `develop` quando for `feature/*` ou `hotfix/*`
-- [ ] O PR aponta para `main` somente quando a origem for `develop`
+- [ ] Este PR aponta para `develop`
+- [ ] A promocao de `develop` para `main` sera feita manualmente
 - [ ] Nao houve commit direto em `develop` ou `main`
 
 ## Validacao
