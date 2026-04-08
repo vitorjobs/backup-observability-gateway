@@ -1,9 +1,9 @@
 ## Fluxo esperado
 
 - [ ] Esta branch nasceu da `main`
-- [ ] Este PR aponta para `develop`
-- [ ] A promocao de `develop` para `main` sera feita manualmente
-- [ ] Nao houve commit direto em `develop` ou `main`
+- [ ] Este PR aponta para `main`
+- [ ] O merge desta feature sera feito em `main`
+- [ ] Nao houve commit direto em `main`
 
 ## Validacao
 
