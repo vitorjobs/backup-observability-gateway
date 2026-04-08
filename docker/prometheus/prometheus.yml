@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+
+scrape_configs:
+  - job_name: veeam-one-api
+    scrape_interval: 30s
+    scrape_timeout: 20s
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - host.docker.internal:9469
+        labels:
+          app: veeam-one-api
+          environment: local

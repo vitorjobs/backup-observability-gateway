@@ -1,0 +1,178 @@
+{
+  "info": {
+    "_postman_id": "e43d1f25-7a26-4a45-9c3f-1a4b34f4b701",
+    "name": "Backup Observability Gateway",
+    "description": "Collection para testar as rotas HTTP do Backup Observability Gateway. A autenticacao com Veeam ONE acontece internamente no backend via .env.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:9469",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Verifica se a API Fastify esta online."
+      }
+    },
+    {
+      "name": "VM Backup Jobs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs/vm-backup",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs",
+            "vm-backup"
+          ]
+        },
+        "description": "Lista jobs no contrato original do endpoint interno Veeam ONE GET /api/{version}/vbrJobs/vmBackupJobs."
+      }
+    },
+    {
+      "name": "Backup Copy Jobs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs/backup-copy",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs",
+            "backup-copy"
+          ]
+        },
+        "description": "Lista jobs no contrato original do endpoint interno Veeam ONE GET /api/{version}/vbrJobs/backupCopyJobs."
+      }
+    },
+    {
+      "name": "Backup To Tape Jobs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/jobs/backup-to-tape",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "jobs",
+            "backup-to-tape"
+          ]
+        },
+        "description": "Lista jobs no contrato original do endpoint interno Veeam ONE GET /api/{version}/vbrJobs/backupToTapeJobs."
+      }
+    },
+    {
+      "name": "Repositories",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/veeam-one/repositories",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "veeam-one",
+            "repositories"
+          ]
+        },
+        "description": "Lista repositorios no contrato original do endpoint interno Veeam ONE GET /api/{version}/vbr/repositories. Query strings recebidas sao repassadas."
+      }
+    },
+    {
+      "name": "Scale-Out Repositories",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/veeam-one/scaleout-repositories",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "veeam-one",
+            "scaleout-repositories"
+          ]
+        },
+        "description": "Lista Scale-Out Repositories no contrato original do endpoint interno Veeam ONE GET /api/{version}/vbr/scaleoutRepositories. Query strings recebidas sao repassadas."
+      }
+    },
+    {
+      "name": "Prometheus Metrics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/plain"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/metrics",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "metrics"
+          ]
+        },
+        "description": "Endpoint de scrape do Prometheus."
+      }
+    }
+  ]
+}

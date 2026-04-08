@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+.env
+.codex
+*.log
+npm-debug.log*
+one_rest_*.yaml
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+docs/.vitepress/.temp/

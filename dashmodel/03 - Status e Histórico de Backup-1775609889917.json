@@ -1,0 +1,2723 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "prometheus_host",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 35,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "panels": [],
+      "title": "🧭 Visão operacional imediata",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Quantidade total de jobs únicos observados no exporter. Este KPI responde quantos jobs existem no ambiente monitorado neste momento, independentemente do estado operacional. O valor usa o conjunto distinto de nomes publicados por veeam_job_info e foi configurado para exibir 0 quando não houver séries retornadas.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#6C5CE7",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "text": "0"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#6C5CE7",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "count(count by (name) (veeam_job_info)) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Total de Jobs",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Quantidade de jobs cujo último estado reportado ao Prometheus é Success. O objetivo é oferecer uma leitura imediata do volume de execuções saudáveis no ambiente e evidenciar rapidamente mudanças de patamar na operação. Quando não houver dados retornados, o painel exibe 0 em vez de “No data”.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#2ECC71",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "text": "0"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#2ECC71",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "count(veeam_job_success) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Jobs com Sucesso",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Quantidade de jobs atualmente em execução no momento do scrape. Este indicador ajuda a acompanhar janelas de concorrência, carga operacional instantânea e possíveis picos de processamento do ambiente de backup.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#3498DB",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "text": "0"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#3498DB",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "count(veeam_job_running) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Jobs em Execução",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Quantidade de jobs cujo estado atual é Failed. É o KPI de atenção imediata para o analista, pois sintetiza o volume de execuções que exigem triagem técnica, reprocessamento ou investigação.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#E74C3C",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "text": "0"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#E74C3C",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "count(veeam_job_failed)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Jobs com Falha",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Quantidade de jobs cujo estado atual está marcado como Warning. Esse número destaca execuções concluídas com alerta, comportamento degradado ou algum tipo de ressalva operacional que ainda pode exigir validação manual.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#F39C12",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "text": "0"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#F39C12",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "count(veeam_job_info{status=\"Warning\"}) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Jobs com Alertas",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Soma do volume transferido da última execução conhecida de cada job exposto pelo exporter. Como as métricas atuais não publicam um timestamp numérico de última execução, este painel representa o volume agregado mais recente disponível no instante da coleta, e não um filtro preciso de jobs executados nas últimas 24 horas.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#00B5D8",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "0": {
+                  "text": "0"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#00B5D8",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "sum(veeam_job_last_transferred_data_bytes) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Volume total da última coleta conhecida",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 17,
+      "panels": [],
+      "title": "🔎 Diagnóstico operacional por status de job",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada dos jobs atualmente no estado Success, com nome do job, status operacional atual, última execução conhecida, duração e volume da última execução. Como o exporter não publica o atributo habilitado/desabilitado, a tabela mostra o estado operacional observável no Prometheus. A coluna 'Status atual' foi destacada por cor para leitura imediata: Success.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 320
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duração da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Volume da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status atual"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Failed": {
+                        "color": "#E74C3C",
+                        "text": "Failed"
+                      },
+                      "Running": {
+                        "color": "#3498DB",
+                        "text": "Running"
+                      },
+                      "Success": {
+                        "color": "#2ECC71",
+                        "text": "Success"
+                      },
+                      "Warning": {
+                        "color": "#F39C12",
+                        "text": "Warning"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#2ECC71",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 140
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 7
+      },
+      "id": 18,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Última execução"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_info{status=\"Success\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_run_duration_seconds",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_transferred_data_bytes",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "C"
+        }
+      ],
+      "title": "Jobs com sucesso no estado atual",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #A": true,
+              "Value #B": true,
+              "Value #C": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #B": 3,
+              "Value #C": 4,
+              "lastRun": 2,
+              "name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "Value #B": "Duração da última execução",
+              "Value #C": "Volume da última execução",
+              "lastRun": "Última execução",
+              "name": "Job",
+              "status": "Status atual"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada dos jobs atualmente no estado Failed, com nome do job, status operacional atual, última execução conhecida, duração e volume da última execução. Esse painel é o ponto de entrada para investigação imediata, priorizando jobs falhados com contexto suficiente para ação operacional. A coluna 'Status atual' foi destacada por cor para leitura imediata: Failed.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 320
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duração da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Volume da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status atual"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Failed": {
+                        "color": "#E74C3C",
+                        "text": "Failed"
+                      },
+                      "Running": {
+                        "color": "#3498DB",
+                        "text": "Running"
+                      },
+                      "Success": {
+                        "color": "#2ECC71",
+                        "text": "Success"
+                      },
+                      "Warning": {
+                        "color": "#F39C12",
+                        "text": "Warning"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E74C3C",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 140
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
+      "id": 25,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Última execução"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_info{status=\"Failed\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_run_duration_seconds",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_transferred_data_bytes",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "C"
+        }
+      ],
+      "title": "Jobs com falha no estado atual",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #A": true,
+              "Value #B": true,
+              "Value #C": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #B": 3,
+              "Value #C": 4,
+              "lastRun": 2,
+              "name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "Value #B": "Duração da última execução",
+              "Value #C": "Volume da última execução",
+              "lastRun": "Última execução",
+              "name": "Job",
+              "status": "Status atual"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada dos jobs atualmente no estado Warning, com nome do job, status operacional atual, última execução conhecida, duração e volume da última execução. O objetivo é acelerar triagem de alertas e identificar rapidamente jobs que merecem revisão, mas ainda não chegaram a falha declarada. A coluna 'Status atual' foi destacada por cor para leitura imediata: Warning.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 320
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duração da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Volume da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status atual"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Failed": {
+                        "color": "#E74C3C",
+                        "text": "Failed"
+                      },
+                      "Running": {
+                        "color": "#3498DB",
+                        "text": "Running"
+                      },
+                      "Success": {
+                        "color": "#2ECC71",
+                        "text": "Success"
+                      },
+                      "Warning": {
+                        "color": "#F39C12",
+                        "text": "Warning"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F39C12",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 140
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 17
+      },
+      "id": 24,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Última execução"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_info{status=\"Warning\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_run_duration_seconds",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_transferred_data_bytes",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "C"
+        }
+      ],
+      "title": "Jobs com alerta no estado atual",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #A": true,
+              "Value #B": true,
+              "Value #C": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #B": 3,
+              "Value #C": 4,
+              "lastRun": 2,
+              "name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "Value #B": "Duração da última execução",
+              "Value #C": "Volume da última execução",
+              "lastRun": "Última execução",
+              "name": "Job",
+              "status": "Status atual"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada dos jobs atualmente em execução no momento da coleta, com nome do job, status operacional atual, última execução conhecida, duração e volume da última execução. Esta tabela foi preparada para permanecer como lista vazia quando não houver jobs em execução, evitando a exibição de mensagens de erro ou interpretações ambíguas. A coluna 'Status atual' foi destacada por cor para leitura imediata: Running.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 320
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duração da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Volume da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status atual"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Failed": {
+                        "color": "#E74C3C",
+                        "text": "Failed"
+                      },
+                      "Running": {
+                        "color": "#3498DB",
+                        "text": "Running"
+                      },
+                      "Success": {
+                        "color": "#2ECC71",
+                        "text": "Success"
+                      },
+                      "Warning": {
+                        "color": "#F39C12",
+                        "text": "Warning"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#3498DB",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 140
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 17
+      },
+      "id": 38,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Duração da última execução"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_info",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_run_duration_seconds",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_transferred_data_bytes",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "C"
+        }
+      ],
+      "title": "Jobs em execução no momento da coleta",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #A": true,
+              "Value #B": true,
+              "Value #C": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #B": 3,
+              "Value #C": 4,
+              "lastRun": 2,
+              "name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "Value #B": "Duração da última execução",
+              "Value #C": "Volume da última execução",
+              "lastRun": "Última execução",
+              "name": "Job",
+              "status": "Status atual"
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "equal",
+                  "options": {
+                    "value": "Running"
+                  }
+                },
+                "fieldName": "Status atual"
+              }
+            ],
+            "match": "all",
+            "type": "include"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 27
+      },
+      "id": 20,
+      "panels": [],
+      "title": "📊 Priorização analítica dos jobs",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada de todos os jobs ordenados pela maior duração da última execução conhecida. O nome do job fica sempre visível e a barra horizontal na célula facilita a comparação entre os maiores tempos de execução. Os filtros ajudam a localizar rapidamente um job específico ou refinar a análise por duração.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 280
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status atual"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Failed": {
+                        "color": "#E74C3C",
+                        "text": "Failed"
+                      },
+                      "Running": {
+                        "color": "#3498DB",
+                        "text": "Running"
+                      },
+                      "Success": {
+                        "color": "#2ECC71",
+                        "text": "Success"
+                      },
+                      "Warning": {
+                        "color": "#F39C12",
+                        "text": "Warning"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duração da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gradient-gauge"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 0,
+        "y": 28
+      },
+      "id": 35,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_info",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_run_duration_seconds",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "B"
+        }
+      ],
+      "title": "Ranking geral por duração da última execução",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #A": true,
+              "Value #B": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #B": 3,
+              "lastRun": 2,
+              "name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "Value #B": "Duração da última execução",
+              "lastRun": "Última execução",
+              "name": "Job",
+              "status": "Status atual"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada de todos os jobs ordenados pela maior duração média reportada pelo exporter. O painel ajuda a identificar jobs estruturalmente mais lentos, mantendo o nome do job visível e uma barra horizontal para comparação rápida. Os filtros permitem restringir a análise por job, status e valor de duração média.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 280
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status atual"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Failed": {
+                        "color": "#E74C3C",
+                        "text": "Failed"
+                      },
+                      "Running": {
+                        "color": "#3498DB",
+                        "text": "Running"
+                      },
+                      "Success": {
+                        "color": "#2ECC71",
+                        "text": "Success"
+                      },
+                      "Warning": {
+                        "color": "#F39C12",
+                        "text": "Warning"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duração média"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gradient-gauge"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 170
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duração da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 8,
+        "y": 28
+      },
+      "id": 36,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Duração média"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_info",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_avg_duration_seconds",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_run_duration_seconds",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "C"
+        }
+      ],
+      "title": "Ranking geral por duração média",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #A": true,
+              "Value #B": true,
+              "Value #C": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #B": 3,
+              "Value #C": 4,
+              "lastRun": 2,
+              "name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "Value #B": "Duração média",
+              "Value #C": "Duração da última execução",
+              "lastRun": "Última execução",
+              "name": "Job",
+              "status": "Status atual"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada de todos os jobs ordenados pelo maior volume da última execução conhecida. O painel preserva a leitura em barra horizontal dentro da tabela e mantém o nome do job sempre visível. Os filtros permitem localizar jobs por nome, status, duração e volume sem depender de mouseover.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 280
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status atual"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Failed": {
+                        "color": "#E74C3C",
+                        "text": "Failed"
+                      },
+                      "Running": {
+                        "color": "#3498DB",
+                        "text": "Running"
+                      },
+                      "Success": {
+                        "color": "#2ECC71",
+                        "text": "Success"
+                      },
+                      "Warning": {
+                        "color": "#F39C12",
+                        "text": "Warning"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Volume da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gradient-gauge"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 190
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duração da última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 16,
+        "y": 28
+      },
+      "id": 37,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_info",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_transferred_data_bytes",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "veeam_job_last_run_duration_seconds",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "C"
+        }
+      ],
+      "title": "Ranking geral por volume da última execução",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #A": true,
+              "Value #B": true,
+              "Value #C": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #B": 3,
+              "Value #C": 4,
+              "lastRun": 2,
+              "name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "Value #B": "Volume da última execução",
+              "Value #C": "Duração da última execução",
+              "lastRun": "Última execução",
+              "name": "Job",
+              "status": "Status atual"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 40
+      },
+      "id": 8,
+      "panels": [],
+      "title": "📈 Pontualidade, taxas e curvas de crescimento",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Evolução temporal da quantidade de jobs por estado operacional ao longo da janela exibida no dashboard. O painel mostra, em paralelo, quantos jobs estão em sucesso, em execução, em falha e com alerta, permitindo identificar instabilidades rápidas, mudança de comportamento entre scrapes e ondas curtas de degradação no ambiente.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 12,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 41
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "count(veeam_job_info{status=\"Success\"})",
+          "legendFormat": "Sucesso",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "count(veeam_job_info{status=\"Running\"})",
+          "legendFormat": "Em execução",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "count(veeam_job_info{status=\"Failed\"})",
+          "legendFormat": "Falha",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "count(veeam_job_info{status=\"Warning\"})",
+          "legendFormat": "Alerta",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Evolução do estado operacional dos jobs",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Curva percentual da taxa de sucesso do ambiente dentro da janela de análise. O cálculo divide a quantidade de jobs em estado Success pelo inventário total observado no exporter, gerando um KPI contínuo para acompanhar estabilidade operacional, qualidade da execução e impacto de falhas recentes.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 12,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 41
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "100 * count(veeam_job_info{status=\"Success\"}) / clamp_min(count(count by (name) (veeam_job_info)), 1)",
+          "legendFormat": "Taxa de sucesso",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "100 * count(veeam_job_info{status=\"Failed\"}) / clamp_min(count(count by (name) (veeam_job_info)), 1)",
+          "hide": false,
+          "legendFormat": "Taxa de Falha",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Taxa de sucesso do ambiente",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 50
+      },
+      "id": 11,
+      "panels": [],
+      "title": "⏱️ Desempenho e eficiência de execução",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Painel comparativo entre o tempo médio exportado pelos jobs e o pico de duração observado na última execução conhecida. Ele ajuda a diferenciar degradação estrutural do ambiente, quando a média cresce, de outliers pontuais, quando apenas o maior valor dispara.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 12,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 51
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "avg(veeam_job_avg_duration_seconds)",
+          "legendFormat": "Tempo médio dos jobs",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "max(veeam_job_last_run_duration_seconds)",
+          "legendFormat": "Maior duração observada",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Tempo médio e pico da última execução",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Curva do volume total de dados processado pelo conjunto de jobs conhecidos no exporter, exibida com conversão automática entre GB e TB conforme a ordem de grandeza. Esse painel ajuda a acompanhar crescimento de dados, mudanças bruscas de carga e tendências de consumo de rede e storage.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 12,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 51
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": "prometheus_host",
+          "editorMode": "code",
+          "expr": "sum(veeam_job_last_transferred_data_bytes)",
+          "legendFormat": "Volume total da última coleta",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Volume total processado pelo ambiente",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "nowDelay": "5m"
+  },
+  "timezone": "browser",
+  "title": "03 - Status e Histórico de Backup",
+  "uid": "addmwqr",
+  "version": 3
+}

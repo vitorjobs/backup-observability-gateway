@@ -1,0 +1,71 @@
+# Docker
+
+Stack Docker isolada para executar:
+
+- API Node.js/Fastify
+- Prometheus
+- Grafana com datasource e dashboards provisionados
+
+## Arquivos
+
+```text
+docker/
+  Dockerfile
+  docker-compose.yml
+  .env.example
+  prometheus/
+    prometheus.yml
+  grafana/
+    provisioning/
+      datasources/prometheus.yml
+      dashboards/dashboards.yml
+    dashboards/veeam-one-jobs-sre.json
+    dashboards/veeam-one-jobs-detail.json
+    dashboards/veeam-one-repositories-capacity.json
+```
+
+## Antes de subir
+
+O arquivo raiz `.env` contem as variaveis da API e credenciais do Veeam ONE.
+
+```bash
+cp .env.example .env
+```
+
+O arquivo `docker/.env` contem variaveis da stack Docker, imagens, nomes de containers e portas.
+
+```bash
+cp docker/.env.example docker/.env
+```
+
+## Subir
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build
+```
+
+## Acessos
+
+- API: `http://localhost:9469`
+- Prometheus: `http://localhost:19090`
+- Grafana: `http://localhost:13000`
+
+## Dashboards
+
+- `Veeam ONE Jobs - SRE Overview`: visao geral de saude, sucesso, falhas, warning, execucao e eficiencia.
+- `Veeam ONE Jobs - Operational Detail`: drill-down por job com inventario, status, duracao, bytes, retries, anomalias, retencao e tape.
+- `Veeam ONE - Repositórios e Capacidade`: visao executiva, operacional e avancada de capacidade de repositories, SOBR e extents.
+
+## Rede
+
+A API usa `network_mode: host` para acessar o Veeam ONE pela mesma rota do host.
+
+O Prometheus usa `host.docker.internal:9469` configurado em `docker/prometheus/prometheus.yml`.
+
+Se a porta da API mudar, ajuste `APP_PORT` no `docker/.env` e o target em `docker/prometheus/prometheus.yml`.
+
+## Parar
+
+```bash
+docker compose --env-file docker/.env -f docker/docker-compose.yml down
+```
