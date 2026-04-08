@@ -182,6 +182,7 @@ O VitePress em `docs/` usa um fluxo `feature/* -> develop -> main`.
 - novas branches devem nascer de `main`
 - qualquer branch de trabalho deve abrir Pull Request para `develop`
 - o CI da documentacao roda no PR para `develop`
+- depois do merge para `develop`, a maquina local deve voltar para `main`
 - a promocao final para deploy acontece com PR manual de `develop` para `main`
 - o GitHub Pages publica automaticamente no merge para `main`
 

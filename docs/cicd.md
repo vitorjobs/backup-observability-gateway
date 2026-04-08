@@ -14,9 +14,10 @@ Fluxo padrao:
 2. Abrir Pull Request da branch de trabalho para `develop`.
 3. O CI da documentacao roda nesse Pull Request.
 4. Revisar e fazer merge em `develop`.
-5. Quando voce decidir promover a versao, abrir manualmente um Pull Request de `develop` para `main`.
-6. Fazer o merge final em `main`.
-7. O deploy da documentacao acontece automaticamente quando o merge chega em `main`.
+5. Depois do merge em `develop`, atualizar a sua maquina local e voltar a IDE para `main`.
+6. Quando voce decidir promover a versao, abrir manualmente um Pull Request de `develop` para `main`.
+7. Fazer o merge final em `main`.
+8. O deploy da documentacao acontece automaticamente quando o merge chega em `main`.
 
 Padrao recomendado para nome de branch:
 
@@ -44,6 +45,42 @@ Depois disso:
 
 - abrir PR da branch atual para `develop`
 - depois do merge em `develop`, a promocao para `main` fica manual e feita por voce
+
+## Acoes Pos-Merge
+
+### Depois do merge do PR para `develop`
+
+Assim que o Pull Request da branch de trabalho for aprovado e merged em `develop`, execute:
+
+```bash
+git switch main
+git pull origin main
+```
+
+Se quiser limpar a branch local ja finalizada:
+
+```bash
+git branch -d feature/minha-feature
+```
+
+Resultado esperado:
+
+- a sua IDE termina posicionada na branch `main`
+- a proxima branch nova continua nascendo da `main`
+
+### Depois do merge manual de `develop` para `main`
+
+Quando voce mesmo concluir o PR de `develop` para `main`, atualize a sua maquina local com:
+
+```bash
+git switch main
+git pull origin main
+```
+
+Resultado esperado:
+
+- a branch `main` local fica sincronizada com o repositorio remoto
+- o codigo atual da sua IDE passa a refletir o estado mais recente publicado
 
 ## O Que O CI Valida
 
