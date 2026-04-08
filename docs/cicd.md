@@ -6,15 +6,15 @@ O projeto usa GitHub Actions para validar e publicar a documentacao VitePress do
 
 ## Estrategia de Branches
 
-A branch de verdade para iniciar qualquer novo trabalho e sempre a `main`.
+A branch base para iniciar qualquer novo trabalho continua sendo a `main`.
 
 Fluxo padrao:
 
 1. Criar uma branch de feature a partir de `main`.
-2. Abrir Pull Request da `feature/*` para `develop`.
-3. Validar a documentacao no CI e revisar o PR.
-4. Fazer merge em `develop`.
-5. Abrir Pull Request de `develop` para `main`.
+2. Abrir Pull Request da branch de trabalho para `develop`.
+3. O CI da documentacao roda nesse Pull Request.
+4. Revisar e fazer merge em `develop`.
+5. Quando voce decidir promover a versao, abrir manualmente um Pull Request de `develop` para `main`.
 6. Fazer o merge final em `main`.
 7. O deploy da documentacao acontece automaticamente quando o merge chega em `main`.
 
@@ -22,6 +22,7 @@ Padrao recomendado para nome de branch:
 
 - `feature/nome-da-feature`
 - `hotfix/nome-do-ajuste`
+- `chore/nome-do-ajuste`
 
 ## Comandos Recomendados
 
@@ -41,21 +42,16 @@ git push -u origin feature/minha-feature
 
 Depois disso:
 
-- abrir PR de `feature/minha-feature` para `develop`
-- apos homologacao, abrir PR de `develop` para `main`
+- abrir PR da branch atual para `develop`
+- depois do merge em `develop`, a promocao para `main` fica manual e feita por voce
 
 ## O Que O CI Valida
 
 Nos Pull Requests:
 
-- PR para `develop` deve sair de `feature/*` ou `hotfix/*`
-- PR para `main` deve sair de `develop`
+- o CI roda em Pull Requests com destino `develop`
 - `npm ci`
 - `npm run docs:build`
-
-No merge para `develop`:
-
-- a documentacao e recompilada para validar o resultado integrado
 
 No merge para `main`:
 
@@ -69,9 +65,9 @@ Para o fluxo ficar realmente protegido no repositorio, mantenha estas configurac
 - branch protection em `develop`
 - branch protection em `main`
 - bloqueio de push direto em `develop` e `main`
-- exigencia de Pull Request antes do merge
+- exigencia de Pull Request antes do merge, principalmente para `develop`
 - exigencia dos workflows de CI como checks obrigatorios
 
 ## Observacao
 
-Este projeto assume `develop` como branch intermediaria.
+`develop` e a branch intermediaria obrigatoria para o fluxo do time.
