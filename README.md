@@ -177,14 +177,13 @@ A documentacao estilo Postman fica em `docs/postman.md`. A collection importavel
 
 ## CI/CD da Documentacao
 
-O VitePress em `docs/` usa um fluxo `feature/* -> develop -> main`.
+O VitePress em `docs/` usa um fluxo `main -> feature/* -> main`.
 
 - novas branches devem nascer de `main`
-- toda nova feature deve seguir o ciclo `main -> feature/* -> develop -> main`
-- qualquer branch de trabalho deve abrir Pull Request para `develop`
-- o CI da documentacao roda no PR para `develop`
-- depois do merge para `develop`, a maquina local deve voltar para `main`
-- a promocao final para deploy acontece com PR manual de `develop` para `main`
+- toda nova feature deve seguir o ciclo `main -> feature/* -> main`
+- qualquer branch de trabalho deve abrir Pull Request para `main`
+- o CI da documentacao roda no PR para `main`
+- depois do merge para `main`, a maquina local deve voltar para `main` e sincronizar com o remoto
 - o GitHub Pages publica automaticamente no merge para `main`
 
 O fluxo completo, com comandos de `branch`, `add`, `commit`, `push`, Pull Request, merge e sincronizacao final da `main`, fica documentado em `docs/cicd.md`.
