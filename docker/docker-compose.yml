@@ -1,26 +1,24 @@
 name: ${OBSERVABILITY_STACK_NAME:-veeam-one-monitoring}
 
 services:
-  api:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    container_name: ${API_CONTAINER_NAME:-veeam-one-api}
-    restart: ${API_RESTART_POLICY:-unless-stopped}
-    env_file:
-      - ../.env
-    environment:
-      APP_HOST: 0.0.0.0
-      APP_PORT: ${APP_PORT:-9469}
-    network_mode: host
+  # api:
+  #   build:
+  #     context: ..
+  #     dockerfile: docker/Dockerfile
+  #   container_name: ${API_CONTAINER_NAME:-veeam-one-api}
+  #   restart: ${API_RESTART_POLICY:-unless-stopped}
+  #   env_file:
+  #     - ../.env
+  #   environment:
+  #     APP_HOST: 0.0.0.0
+  #     APP_PORT: ${APP_PORT:-9469}
+  #   network_mode: host
 
   prometheus:
     image: ${PROMETHEUS_IMAGE:-prom/prometheus:latest}
     pull_policy: always
     container_name: ${PROMETHEUS_CONTAINER_NAME:-veeam-one-prometheus}
     restart: ${PROMETHEUS_RESTART_POLICY:-unless-stopped}
-    depends_on:
-      - api
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
