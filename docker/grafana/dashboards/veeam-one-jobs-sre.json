@@ -17,20 +17,44 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
+  "graphTooltip": 1,
   "id": null,
   "links": [
     {
       "asDropdown": false,
-      "icon": "external link",
-      "includeVars": false,
-      "keepTime": false,
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
       "tags": [],
-      "targetBlank": true,
-      "title": "Veeam ONE REST API v2.2 Reference",
-      "tooltip": "Documentacao oficial dos endpoints Veeam Backup and Replication Jobs",
+      "targetBlank": false,
+      "title": "Panorama de Jobs",
+      "tooltip": "Abrir o dashboard focado na operação de jobs.",
       "type": "link",
-      "url": "https://helpcenter.veeam.com/archive/one/120/rest/reference/one-rest-v22.html#tag/Veeam-Backup-and-Replication-Jobs"
+      "url": "/d/veeam-one-jobs-panorama-geral"
+    },
+    {
+      "asDropdown": false,
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Detalhamento de Jobs",
+      "tooltip": "Abrir o dashboard de drill-down operacional dos jobs.",
+      "type": "link",
+      "url": "/d/veeam-one-jobs-detail"
+    },
+    {
+      "asDropdown": false,
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Repositórios e Capacidade",
+      "tooltip": "Abrir o dashboard focado em capacidade e risco de storage.",
+      "type": "link",
+      "url": "/d/veeam-one-repositories-capacity"
     }
   ],
   "liveNow": false,
@@ -45,20 +69,50 @@
       },
       "id": 100,
       "panels": [],
-      "title": "Executive Health",
+      "title": "Resumo Executivo",
       "type": "row"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Quantidade de jobs Veeam ONE visíveis no filtro atual por tipo e nome.\n\n**Como interpretar:** Use como linha de base do ambiente monitorado; mudanças bruscas podem indicar inclusão, remoção ou falha de coleta.\n\n**Por que importa:** Ajuda a confirmar escopo e a contextualizar todos os demais KPIs.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "fixed",
+            "fixedColor": "#475569"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -80,7 +134,7 @@
       },
       "id": 1,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -91,52 +145,80 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto",
+        "showPercentChange": false,
+        "textMode": "value",
         "wideLayout": true
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(veeam_jobs_total{job_type=~\"$job_type\"})",
-          "legendFormat": "total",
+          "editorMode": "code",
+          "expr": "count(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Total Jobs",
+      "title": "Total de Jobs",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Quantidade de jobs cujo último estado conhecido está em sucesso.\n\n**Como interpretar:** Quanto maior em relação ao total, mais saudável está a operação recente.\n\n**Por que importa:** É o principal indicador de estabilidade da camada de backup.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "#64748b",
                 "value": null
               },
               {
-                "color": "orange",
-                "value": 90
-              },
-              {
                 "color": "green",
-                "value": 98
+                "value": 1
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "short"
         },
         "overrides": []
       },
@@ -148,45 +230,77 @@
       },
       "id": 2,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "mean"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
         },
-        "textMode": "auto",
+        "showPercentChange": false,
+        "textMode": "value",
         "wideLayout": true
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "avg(veeam_jobs_success_ratio{job_type=~\"$job_type\"})",
-          "legendFormat": "success ratio",
+          "editorMode": "code",
+          "expr": "(sum(success_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Success Ratio",
+      "title": "Jobs com Sucesso",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Quantidade de jobs cujo último estado conhecido é falha ou erro.\n\n**Como interpretar:** Valores acima de zero merecem atenção imediata, principalmente quando persistem ao longo do tempo.\n\n**Por que importa:** Falhas recorrentes comprometem RPO, janelas de backup e confiança operacional.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -212,7 +326,7 @@
       },
       "id": 3,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -223,43 +337,75 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto",
+        "showPercentChange": false,
+        "textMode": "value",
         "wideLayout": true
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(veeam_jobs_failed_total{job_type=~\"$job_type\"})",
-          "legendFormat": "failed",
+          "editorMode": "code",
+          "expr": "(sum(failed_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Failed Jobs",
+      "title": "Jobs com Falha",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Quantidade de jobs ativos no momento da coleta.\n\n**Como interpretar:** Serve para acompanhar pressão operacional e confirmar se a janela está em andamento.\n\n**Por que importa:** Ajuda a correlacionar volume, duração e concorrência.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#64748b",
                 "value": null
               },
               {
-                "color": "orange",
+                "color": "#3b82f6",
                 "value": 1
               }
             ]
@@ -276,7 +422,7 @@
       },
       "id": 4,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -287,40 +433,76 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto",
+        "showPercentChange": false,
+        "textMode": "value",
         "wideLayout": true
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(veeam_jobs_warning_total{job_type=~\"$job_type\"})",
-          "legendFormat": "warning",
+          "editorMode": "code",
+          "expr": "(sum(active_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Warning Jobs",
+      "title": "Jobs em Execução",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Quantidade de jobs com warning no último estado conhecido.\n\n**Como interpretar:** Warnings são sinais de degradação que podem anteceder falhas mais severas.\n\n**Por que importa:** Permite agir antes que o problema vire indisponibilidade.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
               }
             ]
           },
@@ -336,7 +518,7 @@
       },
       "id": 5,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -347,44 +529,85 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto",
+        "showPercentChange": false,
+        "textMode": "value",
         "wideLayout": true
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(veeam_jobs_running_total{job_type=~\"$job_type\"})",
-          "legendFormat": "running",
+          "editorMode": "code",
+          "expr": "(count(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=\"warning\"}) or vector(0))",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Running Jobs",
+      "title": "Jobs com Warning",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Razão entre jobs em sucesso e o total de jobs selecionados.\n\n**Como interpretar:** Acima de 95% indica operação estável; abaixo disso o ambiente exige análise do bloco de saúde.\n\n**Por que importa:** Resume em um único número a confiabilidade operacional do ambiente.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
+          "decimals": 1,
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "gray",
+                "color": "red",
                 "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.85
+              },
+              {
+                "color": "green",
+                "value": 0.95
               }
             ]
           },
-          "unit": "short"
+          "unit": "percentunit"
         },
         "overrides": []
       },
@@ -396,7 +619,7 @@
       },
       "id": 6,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -407,79 +630,67 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto",
+        "showPercentChange": false,
+        "textMode": "value",
         "wideLayout": true
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(veeam_jobs_idle_total{job_type=~\"$job_type\"})",
-          "legendFormat": "idle",
+          "editorMode": "code",
+          "expr": "((sum(success_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)) / clamp_min(count(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"}), 1)) or vector(0)",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Idle / No Data",
+      "title": "Taxa de Sucesso (%)",
       "type": "stat"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 5
-      },
-      "id": 101,
-      "panels": [],
-      "title": "Job Status and Trends",
-      "type": "row"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Soma do volume transferido conhecido na última coleta dos jobs filtrados.\n\n**Como interpretar:** Interprete como pressão recente de dados sobre a operação de backup.\n\n**Por que importa:** Ajuda a entender crescimento, gargalos e impacto sobre storage e janela.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "fixed",
+            "fixedColor": "#0f766e"
           },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 15,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
             },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
             },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
             }
-          },
-          "mappings": [],
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -489,80 +700,451 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "decbytes"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 4,
+        "w": 8,
         "x": 0,
-        "y": 6
+        "y": 5
       },
       "id": 7,
       "options": {
-        "legend": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "multi",
-          "sort": "desc"
-        }
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "veeam_jobs_success_ratio{job_type=~\"$job_type\"}",
-          "legendFormat": "{{job_type}}",
+          "editorMode": "code",
+          "expr": "sum(job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Success Ratio by Job Type",
-      "type": "timeseries"
+      "title": "Volume Total Processado",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Soma da capacidade total dos repositórios filtrados por nome e backup server.\n\n**Como interpretar:** Mostra o tamanho disponível da camada de armazenamento de backup tradicional.\n\n**Por que importa:** É essencial para avaliar expansão e risco de saturação.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "fixed",
+            "fixedColor": "#7c3aed"
           },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
             },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "type": "linear"
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
             }
-          },
-          "mappings": [],
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 5
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_repository_capacity_bytes{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Capacidade Total dos Repositórios",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Média percentual de uso dos repositórios filtrados.\n\n**Como interpretar:** Acima de 70% pede atenção; acima de 85% representa risco operacional relevante.\n\n**Por que importa:** Resume o nível de pressão da capacidade disponível.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.7
+              },
+              {
+                "color": "red",
+                "value": 0.85
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 5
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "avg(veeam_repository_usage_ratio{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Uso Médio dos Repositórios (%)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 101,
+      "panels": [],
+      "title": "Status Operacional",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Distribuição atual dos jobs por estado operacional consolidado.\n\n**Como interpretar:** Observe rapidamente a proporção entre sucesso, warning, falha, execução e inatividade.\n\n**Por que importa:** É o painel mais direto para responder se há problemas agora.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#475569",
+                "value": null
+              },
+              {
+                "color": "#475569",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 10
+      },
+      "id": 10,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(sum(success_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": true,
+          "legendFormat": "Sucesso",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(count(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=\"warning\"}) or vector(0))",
+          "instant": true,
+          "legendFormat": "Warning",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(sum(failed_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": true,
+          "legendFormat": "Falha",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(sum(active_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": true,
+          "legendFormat": "Em execução",
+          "range": false,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_jobs_idle_total{job_type=~\"$job_type\"}) or vector(0)",
+          "instant": true,
+          "legendFormat": "Idle",
+          "range": false,
+          "refId": "E"
+        }
+      ],
+      "title": "Distribuição Atual por Status",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Contagem atual de jobs por tipo reportado pelo Veeam ONE.\n\n**Como interpretar:** Use para identificar concentração operacional por workload ou serviço.\n\n**Por que importa:** Ajuda a priorizar análises quando um tipo específico concentra falhas ou volume.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#0f766e",
                 "value": null
               }
             ]
@@ -573,28 +1155,27 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 6
+        "w": 8,
+        "x": 8,
+        "y": 10
       },
-      "id": 8,
+      "id": 11,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.9,
+        "barWidth": 0.8,
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
-          "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
-        "orientation": "auto",
+        "orientation": "horizontal",
         "showValue": "auto",
-        "stacking": "normal",
+        "stacking": "none",
         "tooltip": {
           "hideZeros": false,
-          "mode": "multi",
+          "mode": "single",
           "sort": "desc"
         },
         "xTickLabelRotation": 0,
@@ -604,21 +1185,136 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum by (job_type, status) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
-          "legendFormat": "{{job_type}} / {{status}}",
+          "editorMode": "code",
+          "expr": "count by (job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
+          "instant": true,
+          "legendFormat": "{{job_type}}",
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Jobs by Type and Status",
+      "title": "Distribuição por Tipo de Job",
       "type": "barchart"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Comparação entre jobs em execução e jobs fora de execução no instante atual.\n\n**Como interpretar:** Desbalanceamentos fora da janela esperada podem indicar backlog, travamento ou ambiente ocioso demais.\n\n**Por que importa:** Ajuda a validar rapidamente a dinâmica operacional da janela.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#94a3b8",
+                "value": null
+              },
+              {
+                "color": "#3b82f6",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 10
+      },
+      "id": 12,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 16,
+        "minVizWidth": 16,
+        "namePlacement": "left",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "manual",
+        "valueMode": "color"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(sum(active_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": true,
+          "legendFormat": "Ativos",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "clamp_min(count(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"}) - (sum(active_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)), 0) or vector(0)",
+          "instant": true,
+          "legendFormat": "Inativos",
+          "range": false,
+          "refId": "B"
+        }
+      ],
+      "title": "Jobs Ativos vs Inativos",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Lista dos jobs em falha, erro ou alerta no estado atual.\n\n**Como interpretar:** Ordene e filtre para localizar rapidamente os itens mais críticos por duração, volume ou recência.\n\n**Por que importa:** Centraliza o ponto de partida para investigação e ação corretiva.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -629,9 +1325,38 @@
             "cellOptions": {
               "type": "auto"
             },
+            "filterable": true,
             "inspect": false
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -642,61 +1367,271 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Tipo"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "vm_backup": {
+                        "color": "#2563eb",
+                        "text": "VMware"
+                      },
+                      "backup_to_tape": {
+                        "color": "#f59e0b",
+                        "text": "TAPE"
+                      },
+                      "backup_copy": {
+                        "color": "#14b8a6",
+                        "text": "Backup Copy"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "success": {
+                        "color": "green",
+                        "text": "Sucesso"
+                      },
+                      "failed": {
+                        "color": "red",
+                        "text": "Falha"
+                      },
+                      "error": {
+                        "color": "red",
+                        "text": "Erro"
+                      },
+                      "warning": {
+                        "color": "orange",
+                        "text": "Alerta"
+                      },
+                      "running": {
+                        "color": "blue",
+                        "text": "Em execução"
+                      },
+                      "working": {
+                        "color": "blue",
+                        "text": "Em execução"
+                      },
+                      "active": {
+                        "color": "blue",
+                        "text": "Em execução"
+                      },
+                      "disabled": {
+                        "color": "#6b7280",
+                        "text": "Idle"
+                      },
+                      "none": {
+                        "color": "#6b7280",
+                        "text": "Idle"
+                      },
+                      "unknown": {
+                        "color": "#9ca3af",
+                        "text": "Desconhecido"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              },
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^Duração$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dtdurations"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^Volume$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 18
       },
-      "id": 9,
+      "id": 13,
       "options": {
         "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Última execução"
+          }
+        ]
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"}",
+          "editorMode": "code",
+          "expr": "veeam_job_info{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"failed|error|warning\"})",
           "format": "table",
           "instant": true,
-          "legendFormat": "{{job_name}}",
+          "range": false,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"failed|error|warning\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_last_run_timestamp_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"failed|error|warning\"})",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"failed|error|warning\"})",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_transferred_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"failed|error|warning\"})",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "E"
         }
       ],
-      "title": "Latest Job Status",
+      "title": "Jobs Críticos no Estado Atual",
       "transformations": [
         {
-          "id": "labelsToFields",
-          "options": {
-            "mode": "columns"
-          }
+          "id": "merge",
+          "options": {}
         },
         {
           "id": "organize",
           "options": {
             "excludeByName": {
               "Time": true,
-              "__name__": true
+              "Value": true,
+              "__name__": true,
+              "app": true,
+              "environment": true,
+              "instance": true,
+              "job": true,
+              "platform": true
             },
-            "includeByName": {},
-            "indexByName": {},
+            "indexByName": {
+              "job_name": 0,
+              "job_type": 1,
+              "status": 2,
+              "Value #C": 3,
+              "Value #D": 4,
+              "Value #E": 5
+            },
             "renameByName": {
-              "Value": "status_active",
-              "job_name": "job",
-              "job_type": "type"
+              "job_name": "Job",
+              "job_type": "Tipo",
+              "status": "Status",
+              "Value #C": "Última execução",
+              "Value #D": "Duração",
+              "Value #E": "Volume"
             }
           }
         }
@@ -709,150 +1644,19 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 28
       },
       "id": 102,
       "panels": [],
-      "title": "Performance and Efficiency",
+      "title": "Evolução Temporal",
       "type": "row"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 23
-      },
-      "id": 10,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.9,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "horizontal",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "desc"
-        },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "expr": "topk(10, veeam_job_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
-          "legendFormat": "{{job_type}} / {{job_name}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Top Jobs by Last Duration",
-      "type": "barchart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 23
-      },
-      "id": 11,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.9,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "horizontal",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "desc"
-        },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "expr": "topk(10, veeam_job_transferred_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
-          "legendFormat": "{{job_type}} / {{job_name}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Top Jobs by Transferred Data",
-      "type": "barchart"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "description": "**O que mostra:** Série temporal com a contagem de jobs por estado consolidado em cada coleta do Prometheus.\n\n**Como interpretar:** Mudanças persistentes de tendência mostram degradação ou recuperação operacional do ambiente.\n\n**Por que importa:** É o melhor bloco para entender comportamento recente e sazonalidade da operação.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -862,32 +1666,59 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisPlacement": "auto",
             "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
+            "fillOpacity": 24,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "lineWidth": 3,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "never",
-            "spanNulls": false,
+            "showPoints": "auto",
+            "spanNulls": true,
             "stacking": {
               "group": "A",
-              "mode": "none"
+              "mode": "normal"
             },
             "thresholdsStyle": {
               "mode": "off"
             }
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -897,7 +1728,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "short"
         },
         "overrides": []
       },
@@ -905,20 +1736,21 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 31
+        "y": 29
       },
-      "id": 12,
+      "id": 14,
       "options": {
         "legend": {
           "calcs": [
-            "lastNotNull"
+            "lastNotNull",
+            "mean",
+            "max"
           ],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
         "tooltip": {
-          "hideZeros": false,
           "mode": "multi",
           "sort": "desc"
         }
@@ -927,41 +1759,395 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "veeam_job_avg_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"}",
-          "legendFormat": "{{job_type}} / {{job_name}}",
+          "editorMode": "code",
+          "expr": "(sum(success_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": false,
+          "legendFormat": "Sucesso",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(count(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=\"warning\"}) or vector(0))",
+          "instant": false,
+          "legendFormat": "Warning",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(sum(failed_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": false,
+          "legendFormat": "Falha",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(sum(active_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": false,
+          "legendFormat": "Em execução",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_jobs_idle_total{job_type=~\"$job_type\"}) or vector(0)",
+          "instant": false,
+          "legendFormat": "Idle",
+          "range": true,
+          "refId": "E"
         }
       ],
-      "title": "Average Duration by Job",
+      "title": "Estado Operacional ao Longo do Tempo",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Evolução temporal dos jobs em falha e warning.\n\n**Como interpretar:** Tendência de alta indica deterioração operacional; quedas após intervenção validam a ação corretiva.\n\n**Por que importa:** Permite antecipar incidentes antes que se tornem generalizados.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
-          "mappings": [],
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "drawStyle": "line",
+            "fillOpacity": 18,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              },
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 15,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(sum(failed_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0))",
+          "instant": false,
+          "legendFormat": "Falha",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(count(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=\"warning\"}) or vector(0))",
+          "instant": false,
+          "legendFormat": "Warning",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Falhas e Alertas ao Longo do Tempo",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Soma do volume transferido conhecido pelos jobs monitorados ao longo do tempo.\n\n**Como interpretar:** Use para perceber picos de processamento e verificar se o volume acompanha o comportamento esperado da janela.\n\n**Por que importa:** Ajuda a correlacionar crescimento de dados com duração e consumo de storage.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "drawStyle": "line",
+            "fillOpacity": 18,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
               {
-                "color": "orange",
-                "value": 86400
-              },
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 37
+      },
+      "id": 16,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)",
+          "instant": false,
+          "legendFormat": "Volume processado",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Volume Transferido Conhecido",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Comparação entre duração média da última execução e duração média histórica reportada pelo exporter.\n\n**Como interpretar:** Se a linha da última execução se afastar muito da média histórica, há sinal de anomalia operacional.\n\n**Por que importa:** Ajuda a detectar lentidão, gargalo de infraestrutura e mudança de perfil do workload.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "drawStyle": "line",
+            "fillOpacity": 18,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
               {
-                "color": "red",
-                "value": 172800
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -973,304 +2159,53 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 31
-      },
-      "id": 13,
-      "options": {
-        "barRadius": 0,
-        "barWidth": 0.9,
-        "fullHighlight": false,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "orientation": "horizontal",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "desc"
-        },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "expr": "topk(15, time() - veeam_job_last_run_timestamp_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} > 0)",
-          "legendFormat": "{{job_type}} / {{job_name}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Oldest Last Run Age",
-      "type": "barchart"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 39
-      },
-      "id": 103,
-      "panels": [],
-      "title": "Protection Workload",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 0,
-        "y": 40
-      },
-      "id": 14,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "expr": "sum(veeam_job_objects_total{job_type=\"vm_backup\", job_name=~\"$job_name\"})",
-          "legendFormat": "objects",
-          "refId": "A"
-        }
-      ],
-      "title": "VM Backup Objects",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 6,
-        "y": 40
-      },
-      "id": 15,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "expr": "sum(veeam_job_processed_objects_total{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
-          "legendFormat": "processed",
-          "refId": "A"
-        }
-      ],
-      "title": "Processed Objects",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 12,
-        "y": 40
-      },
-      "id": 16,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "expr": "sum(veeam_job_anomalies_total{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
-          "legendFormat": "anomalies",
-          "refId": "A"
-        }
-      ],
-      "title": "Anomalies",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "orange",
-                "value": 1
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 18,
-        "y": 40
+        "y": 37
       },
       "id": 17,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
+        "legend": {
           "calcs": [
-            "lastNotNull"
+            "lastNotNull",
+            "mean",
+            "max"
           ],
-          "fields": "",
-          "values": false
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "textMode": "auto",
-        "wideLayout": true
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(veeam_job_retry_count{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
-          "legendFormat": "retries",
+          "editorMode": "code",
+          "expr": "avg(job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)",
+          "instant": false,
+          "legendFormat": "Última execução",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "avg(veeam_job_avg_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)",
+          "instant": false,
+          "legendFormat": "Média histórica",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "title": "Retries",
-      "type": "stat"
+      "title": "Duração Média dos Jobs",
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -1280,32 +2215,71 @@
         "x": 0,
         "y": 45
       },
-      "id": 104,
+      "id": 103,
       "panels": [],
-      "title": "Retention and Compliance",
+      "title": "Repositórios",
       "type": "row"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Ranking dos repositórios com maior percentual de utilização atual.\n\n**Como interpretar:** Repositórios no topo do ranking devem ser avaliados antes de afetarem novos backups e retenções.\n\n**Por que importa:** É o principal painel para priorizar ação de capacidade.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "max": 100,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
               }
             ]
           },
-          "unit": "short"
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -1318,7 +2292,7 @@
       "id": 18,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.9,
+        "barWidth": 0.8,
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
@@ -1341,21 +2315,125 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "veeam_job_retention_points{job_type=\"backup_copy\", job_name=~\"$job_name\"}",
-          "legendFormat": "{{job_name}}",
+          "editorMode": "code",
+          "expr": "topk(10, veeam_repository_usage_ratio{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"} * 100)",
+          "instant": true,
+          "legendFormat": "{{repository_name}}",
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Backup Copy Retention Points",
+      "title": "Ranking de Utilização dos Repositórios",
       "type": "barchart"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Maior percentual de utilização encontrado entre os repositórios filtrados.\n\n**Como interpretar:** Valores altos indicam risco concentrado mesmo quando a média geral parece confortável.\n\n**Por que importa:** Ajuda a evitar que um único repositório crítico esconda a real urgência do ambiente.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 12,
+        "y": 46
+      },
+      "id": 19,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(veeam_repository_usage_ratio{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Maior Uso entre Repositórios",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Menor estimativa de dias restantes até esgotamento de capacidade entre os repositórios filtrados.\n\n**Como interpretar:** Quanto menor o valor, mais urgente é a necessidade de expansão, limpeza ou revisão de retenção.\n\n**Por que importa:** É um indicador direto de risco de parada por capacidade.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1363,17 +2441,35 @@
           },
           "mappings": [
             {
+              "type": "special",
               "options": {
-                "0": {
-                  "text": "Disabled"
-                },
-                "1": {
-                  "text": "Enabled"
+                "match": "nan",
+                "result": {
+                  "text": "0"
                 }
-              },
-              "type": "value"
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
             }
           ],
+          "max": 180,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1382,29 +2478,32 @@
                 "value": null
               },
               {
+                "color": "orange",
+                "value": 30
+              },
+              {
+                "color": "yellow",
+                "value": 60
+              },
+              {
                 "color": "green",
-                "value": 1
+                "value": 120
               }
             ]
           },
-          "unit": "short"
+          "unit": "d"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
+        "w": 4,
+        "x": 16,
         "y": 46
       },
-      "id": 19,
+      "id": 20,
       "options": {
-        "displayMode": "gradient",
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
-        "orientation": "horizontal",
+        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -1412,29 +2511,132 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "valueMode": "color"
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "veeam_job_schedule_enabled{job_type=\"backup_copy\", job_name=~\"$job_name\"}",
-          "legendFormat": "{{job_name}}",
+          "editorMode": "code",
+          "expr": "min(veeam_repository_days_left_estimate{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}) or vector(0)",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "Backup Copy Schedule Enabled",
-      "type": "bargauge"
+      "title": "Menor Folga Estimada (dias)",
+      "type": "gauge"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
+      "description": "**O que mostra:** Maior percentual de utilização entre os Scale-Out Backup Repositories monitorados.\n\n**Como interpretar:** SOBRs pressionados tendem a concentrar riscos de tier, placement e offload.\n\n**Por que importa:** Complementa a leitura de risco da camada de storage avançado.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 20,
+        "y": 46
+      },
+      "id": 21,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max(veeam_sobr_usage_ratio{backup_server=~\"$backup_server\"}) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Maior Uso entre SOBRs",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Tabela detalhada com capacidade, uso, espaço livre, estado, restore points, backups, VMs e dias restantes por repositório.\n\n**Como interpretar:** Ordene pelo percentual de uso ou pelos dias restantes para localizar o maior risco primeiro.\n\n**Por que importa:** É a principal base operacional para ação de capacidade.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1445,9 +2647,38 @@
             "cellOptions": {
               "type": "auto"
             },
+            "filterable": true,
             "inspect": false
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1458,75 +2689,1635 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^(Capacidade|Usado|Livre)$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^% Utilização$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gradient-gauge"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 24,
+        "h": 10,
+        "w": 14,
         "x": 0,
         "y": 54
       },
-      "id": 20,
+      "id": 22,
       "options": {
         "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "% Utilização"
+          }
+        ]
       },
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "veeam_job_last_result_code{job_type=\"backup_to_tape\", job_name=~\"$job_name\"}",
+          "editorMode": "code",
+          "expr": "veeam_repository_capacity_bytes{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}",
           "format": "table",
           "instant": true,
-          "legendFormat": "{{job_name}}",
+          "range": false,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_used_bytes{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_free_bytes{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_usage_ratio{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"} * 100",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_days_left_estimate{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_restore_points_total{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "F"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_backups_total{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "G"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_vms_total{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "H"
         }
       ],
-      "title": "Backup to Tape Last Result",
+      "title": "Detalhamento dos Repositórios",
       "transformations": [
         {
-          "id": "labelsToFields",
-          "options": {
-            "mode": "columns"
-          }
+          "id": "merge",
+          "options": {}
         },
         {
           "id": "organize",
           "options": {
             "excludeByName": {
               "Time": true,
-              "__name__": true
+              "Value": true,
+              "__name__": true,
+              "instance": true,
+              "job": true
             },
-            "includeByName": {},
-            "indexByName": {},
+            "indexByName": {
+              "repository_name": 0,
+              "repository_type": 1,
+              "backup_server": 2,
+              "state": 3,
+              "Value #A": 4,
+              "Value #B": 5,
+              "Value #C": 6,
+              "Value #D": 7,
+              "Value #E": 8,
+              "Value #F": 9,
+              "Value #G": 10,
+              "Value #H": 11
+            },
             "renameByName": {
-              "Value": "result_code",
-              "job_name": "job",
-              "job_type": "type"
+              "repository_name": "Repositório",
+              "repository_type": "Tipo",
+              "backup_server": "Backup Server",
+              "state": "Estado",
+              "Value #A": "Capacidade",
+              "Value #B": "Usado",
+              "Value #C": "Livre",
+              "Value #D": "% Utilização",
+              "Value #E": "Dias restantes",
+              "Value #F": "Restore points",
+              "Value #G": "Backups",
+              "Value #H": "VMs"
             }
           }
         }
       ],
       "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Tabela com capacidade, uso, espaço livre e percentual por extent dos SOBRs monitorados.\n\n**Como interpretar:** Extents com maior utilização tendem a concentrar gargalo ou necessidade de rebalanceamento.\n\n**Por que importa:** Ajuda a sair da visão agregada do SOBR e localizar o ponto exato do risco.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^(Capacidade|Usado|Livre)$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^% Utilização$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gradient-gauge"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 14,
+        "y": 54
+      },
+      "id": 23,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "% Utilização"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_extent_capacity_bytes{backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_extent_used_bytes{backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_extent_free_bytes{backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_extent_usage_ratio{backup_server=~\"$backup_server\"} * 100",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "D"
+        }
+      ],
+      "title": "SOBR e Extents",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "__name__": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "sobr_name": 0,
+              "extent_name": 1,
+              "extent_type": 2,
+              "backup_server": 3,
+              "Value #A": 4,
+              "Value #B": 5,
+              "Value #C": 6,
+              "Value #D": 7
+            },
+            "renameByName": {
+              "sobr_name": "SOBR",
+              "extent_name": "Extent",
+              "extent_type": "Tipo",
+              "backup_server": "Backup Server",
+              "Value #A": "Capacidade",
+              "Value #B": "Usado",
+              "Value #C": "Livre",
+              "Value #D": "% Utilização"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 64
+      },
+      "id": 104,
+      "panels": [],
+      "title": "Distribuições",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Distribuição dos jobs por faixas de duração da última execução conhecida.\n\n**Como interpretar:** Concentração em faixas maiores indica janela mais pesada e maior sensibilidade a gargalos.\n\n**Por que importa:** Ajuda a separar workloads curtos, médios e longos para investigação.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 65
+      },
+      "id": 24,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count((job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} > 0) and (job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} <= 300)) or vector(0)",
+          "instant": true,
+          "legendFormat": "Até 5 min",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count((job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} > 300) and (job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} <= 900)) or vector(0)",
+          "instant": true,
+          "legendFormat": "5 a 15 min",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count((job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} > 900) and (job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} <= 3600)) or vector(0)",
+          "instant": true,
+          "legendFormat": "15 a 60 min",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count(job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} > 3600) or vector(0)",
+          "instant": true,
+          "legendFormat": "Acima de 60 min",
+          "range": false,
+          "refId": "D"
+        }
+      ],
+      "title": "Faixas de Duração da Última Execução",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Distribuição dos jobs por faixas de volume transferido conhecido na última coleta.\n\n**Como interpretar:** Faixas mais altas indicam jobs com maior pressão sobre a janela e o storage.\n\n**Por que importa:** Ajuda a localizar quais cargas tendem a concentrar consumo de dados.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 65
+      },
+      "id": 25,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count(job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"} <= 107374182400) or vector(0)",
+          "instant": true,
+          "legendFormat": "Até 100 GB",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count((job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"} > 107374182400) and (job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"} <= 536870912000)) or vector(0)",
+          "instant": true,
+          "legendFormat": "100 a 500 GB",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count((job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"} > 536870912000) and (job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"} <= 1099511627776)) or vector(0)",
+          "instant": true,
+          "legendFormat": "500 GB a 1 TB",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count(job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"} > 1099511627776) or vector(0)",
+          "instant": true,
+          "legendFormat": "Acima de 1 TB",
+          "range": false,
+          "refId": "D"
+        }
+      ],
+      "title": "Faixas de Volume Processado",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Contagem dos jobs por plataforma reportada no exporter.\n\n**Como interpretar:** Use para identificar concentração de workloads em VMware, Hyper-V ou outras plataformas suportadas.\n\n**Por que importa:** É útil para priorizar troubleshooting por domínio tecnológico.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 65
+      },
+      "id": 26,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count by (platform) (veeam_job_info{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
+          "instant": true,
+          "legendFormat": "{{platform}}",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Distribuição por Plataforma",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Distribuição dos repositórios por estado operacional informado pelo exporter.\n\n**Como interpretar:** Mudanças nesse mix ajudam a identificar indisponibilidade, manutenção ou degradação da camada de storage.\n\n**Por que importa:** Complementa a leitura de capacidade com a leitura de disponibilidade.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 73
+      },
+      "id": 27,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count by (state) (veeam_repository_usage_ratio{repository_name=~\"$repository_name\", backup_server=~\"$backup_server\"})",
+          "instant": true,
+          "legendFormat": "{{state}}",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Estados dos Repositórios",
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 81
+      },
+      "id": 105,
+      "panels": [],
+      "title": "Detalhamento Operacional",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Tabela operacional consolidada dos jobs com tipo, status, última execução, duração e volume.\n\n**Como interpretar:** Use paginação, ordenação e filtros de coluna para investigar rapidamente jobs específicos.\n\n**Por que importa:** É a visão mais rica para apoiar decisão operacional de curto prazo.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Tipo"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "vm_backup": {
+                        "color": "#2563eb",
+                        "text": "VMware"
+                      },
+                      "backup_to_tape": {
+                        "color": "#f59e0b",
+                        "text": "TAPE"
+                      },
+                      "backup_copy": {
+                        "color": "#14b8a6",
+                        "text": "Backup Copy"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "success": {
+                        "color": "green",
+                        "text": "Sucesso"
+                      },
+                      "failed": {
+                        "color": "red",
+                        "text": "Falha"
+                      },
+                      "error": {
+                        "color": "red",
+                        "text": "Erro"
+                      },
+                      "warning": {
+                        "color": "orange",
+                        "text": "Alerta"
+                      },
+                      "running": {
+                        "color": "blue",
+                        "text": "Em execução"
+                      },
+                      "working": {
+                        "color": "blue",
+                        "text": "Em execução"
+                      },
+                      "active": {
+                        "color": "blue",
+                        "text": "Em execução"
+                      },
+                      "disabled": {
+                        "color": "#6b7280",
+                        "text": "Idle"
+                      },
+                      "none": {
+                        "color": "#6b7280",
+                        "text": "Idle"
+                      },
+                      "unknown": {
+                        "color": "#9ca3af",
+                        "text": "Desconhecido"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Última execução"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsLocal"
+              },
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^Duração/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dtdurations"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^Volume transferido$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 82
+      },
+      "id": 28,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Última execução"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_info{job_type=~\"$job_type\", job_name=~\"$job_name\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_last_run_timestamp_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_avg_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"}",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_job_transferred_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"})",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "F"
+        }
+      ],
+      "title": "Inventário Operacional dos Jobs",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "__name__": true,
+              "app": true,
+              "environment": true,
+              "instance": true,
+              "job": true,
+              "platform": true
+            },
+            "indexByName": {
+              "job_name": 0,
+              "job_type": 1,
+              "status": 2,
+              "Value #C": 3,
+              "Value #D": 4,
+              "Value #E": 5,
+              "Value #F": 6
+            },
+            "renameByName": {
+              "job_name": "Job",
+              "job_type": "Tipo",
+              "status": "Status",
+              "Value #C": "Última execução",
+              "Value #D": "Duração última execução",
+              "Value #E": "Duração média histórica",
+              "Value #F": "Volume transferido"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 94
+      },
+      "id": 106,
+      "panels": [],
+      "title": "Saúde do Ambiente",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Taxa de sucesso consolidada por tipo de job usando a métrica agregada do exporter.\n\n**Como interpretar:** Tipos com valores mais baixos concentram maior risco e devem virar prioridade investigativa.\n\n**Por que importa:** Ajuda a direcionar a análise para o serviço mais degradado do ambiente.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 85
+              },
+              {
+                "color": "green",
+                "value": 95
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 95
+      },
+      "id": 29,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 16,
+        "minVizWidth": 16,
+        "namePlacement": "left",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "manual",
+        "valueMode": "color"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_jobs_success_ratio{job_type=~\"$job_type\"} * 100",
+          "instant": true,
+          "legendFormat": "{{job_type}}",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Taxa de Sucesso por Tipo de Job",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Visão consolidada dos jobs em failed, warning, idle e running a partir das métricas agregadas por tipo.\n\n**Como interpretar:** O bloco evidencia rapidamente se a degradação é falha direta, alerta recorrente ou ociosidade anormal.\n\n**Por que importa:** Funciona como checklist de saúde antes do drill-down em tabelas.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#64748b",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 95
+      },
+      "id": 30,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 16,
+        "minVizWidth": 16,
+        "namePlacement": "left",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "manual",
+        "valueMode": "color"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_jobs_failed_total{job_type=~\"$job_type\"}) or vector(0)",
+          "instant": true,
+          "legendFormat": "Falha",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_jobs_warning_total{job_type=~\"$job_type\"}) or vector(0)",
+          "instant": true,
+          "legendFormat": "Warning",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_jobs_idle_total{job_type=~\"$job_type\"}) or vector(0)",
+          "instant": true,
+          "legendFormat": "Idle",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_jobs_running_total{job_type=~\"$job_type\"}) or vector(0)",
+          "instant": true,
+          "legendFormat": "Em execução",
+          "range": false,
+          "refId": "D"
+        }
+      ],
+      "title": "Indicadores de Degradação Atual",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Comparação temporal entre jobs degradados e o total consolidado do ambiente por tipo.\n\n**Como interpretar:** Se a linha degradada cresce ou se aproxima do total, o ambiente está perdendo estabilidade.\n\n**Por que importa:** É o painel final para responder se a saúde geral está melhorando ou piorando.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "drawStyle": "line",
+            "fillOpacity": 18,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 95
+      },
+      "id": 31,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "((sum(veeam_jobs_failed_total{job_type=~\"$job_type\"}) or vector(0)) + (sum(veeam_jobs_warning_total{job_type=~\"$job_type\"}) or vector(0)) + (sum(veeam_jobs_idle_total{job_type=~\"$job_type\"}) or vector(0)))",
+          "instant": false,
+          "legendFormat": "Degradados",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_jobs_total{job_type=~\"$job_type\"}) or vector(0)",
+          "instant": false,
+          "legendFormat": "Total",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Tendência de Degradação",
+      "type": "timeseries"
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 41,
+  "schemaVersion": 42,
   "tags": [
-    "veeam-one",
-    "backup",
-    "prometheus",
-    "sre"
+    "veeam",
+    "jobs",
+    "repositories",
+    "executivo",
+    "operacional"
   ],
   "templating": {
     "list": [
@@ -1538,9 +4329,8 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Datasource",
-        "multi": false,
-        "name": "datasource",
+        "label": "Fonte de Dados",
+        "name": "DS_PROMETHEUS",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
@@ -1556,16 +4346,19 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "$datasource"
+          "uid": "${DS_PROMETHEUS}"
         },
-        "definition": "label_values(veeam_jobs_total, job_type)",
+        "definition": "label_values(veeam_job_info, job_type)",
         "hide": 0,
         "includeAll": true,
-        "label": "Job Type",
+        "label": "Tipo de job",
         "multi": true,
         "name": "job_type",
         "options": [],
-        "query": "label_values(veeam_jobs_total, job_type)",
+        "query": {
+          "query": "label_values(veeam_job_info, job_type)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
         "refresh": 1,
         "regex": "",
         "sort": 1,
@@ -1580,17 +4373,20 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "$datasource"
+          "uid": "${DS_PROMETHEUS}"
         },
         "definition": "label_values(veeam_job_info{job_type=~\"$job_type\"}, job_name)",
         "hide": 0,
         "includeAll": true,
-        "label": "Job Name",
+        "label": "Job",
         "multi": true,
         "name": "job_name",
         "options": [],
-        "query": "label_values(veeam_job_info{job_type=~\"$job_type\"}, job_name)",
-        "refresh": 2,
+        "query": {
+          "query": "label_values(veeam_job_info{job_type=~\"$job_type\"}, job_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
         "regex": "",
         "sort": 1,
         "type": "query"
@@ -1604,7 +4400,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "$datasource"
+          "uid": "${DS_PROMETHEUS}"
         },
         "definition": "label_values(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"}, status)",
         "hide": 0,
@@ -1613,8 +4409,65 @@
         "multi": true,
         "name": "status",
         "options": [],
-        "query": "label_values(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"}, status)",
-        "refresh": 2,
+        "query": {
+          "query": "label_values(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\"}, status)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values({__name__=~\"veeam_repository_capacity_bytes|veeam_sobr_capacity_bytes|veeam_sobr_extent_capacity_bytes\"}, backup_server)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Backup Server",
+        "multi": true,
+        "name": "backup_server",
+        "options": [],
+        "query": {
+          "query": "label_values({__name__=~\"veeam_repository_capacity_bytes|veeam_sobr_capacity_bytes|veeam_sobr_extent_capacity_bytes\"}, backup_server)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(veeam_repository_capacity_bytes{backup_server=~\"$backup_server\"}, repository_name)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Repositório",
+        "multi": true,
+        "name": "repository_name",
+        "options": [],
+        "query": {
+          "query": "label_values(veeam_repository_capacity_bytes{backup_server=~\"$backup_server\"}, repository_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
         "regex": "",
         "sort": 1,
         "type": "query"
@@ -1622,12 +4475,13 @@
     ]
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-30d",
     "to": "now"
   },
+  "timepicker": {},
   "timezone": "browser",
-  "title": "Veeam ONE Jobs - SRE Overview",
+  "title": "Veeam ONE - Operação de Jobs e Repositórios",
   "uid": "veeam-one-jobs-sre",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

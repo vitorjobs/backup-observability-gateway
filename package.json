@@ -8,6 +8,7 @@
     "start": "node dist/server.js",
     "test": "vitest run",
     "check": "tsc --noEmit -p tsconfig.test.json",
+    "dashboards:build": "node scripts/generate-grafana-dashboards.mjs",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"

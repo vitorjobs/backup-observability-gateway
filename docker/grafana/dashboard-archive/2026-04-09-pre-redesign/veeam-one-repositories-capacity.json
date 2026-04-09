@@ -1,0 +1,1791 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Bloco executivo com os principais indicadores de capacidade dos repositórios.\n\n**Por que importa:** Permite responder rapidamente se há risco de falta de espaço e onde priorizar ação.\n\n**Quando é problema:** Quando o uso ultrapassa 85%, quando há repositórios em risco ou quando a estimativa de dias restantes é baixa.\n\n**Ação recomendada:** Priorizar expansão, limpeza, movimentação de backups ou revisão de retenção nos repositórios críticos.",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "panels": [],
+      "title": "Visão Executiva de Capacidade",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Média percentual de uso dos repositórios monitorados.\n\n**Por que importa:** Mostra a pressão geral sobre a camada de armazenamento de backup.\n\n**Quando é problema:** Acima de 70% exige atenção; acima de 85% indica risco alto de falta de espaço.\n\n**Ação recomendada:** Verificar os repositórios com maior uso e planejar expansão ou ajuste de retenção.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "avg(veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"}) * 100 or vector(0)",
+          "instant": true,
+          "legendFormat": "Uso médio",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Uso Médio dos Repositórios (%)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Quantidade de repositórios com uso acima de 85%.\n\n**Por que importa:** Repositórios cheios podem interromper backups, retenções e cópias.\n\n**Quando é problema:** Qualquer valor acima de 0 indica ação operacional imediata.\n\n**Ação recomendada:** Atuar primeiro nos repositórios listados em \"Top Repositórios com Maior Uso\".",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count(veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} > 0.85) or vector(0)",
+          "instant": true,
+          "legendFormat": "Em risco",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Repositórios em Risco (>85%)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Soma do espaço livre dos repositórios, convertido de bytes para TB.\n\n**Por que importa:** Indica a folga disponível para novas cadeias de backup e retenções.\n\n**Quando é problema:** Quando cai rapidamente ou fica incompatível com a janela de crescimento do ambiente.\n\n**Ação recomendada:** Validar crescimento, retenção e expansão antes que a capacidade se esgote.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 5
+              },
+              {
+                "color": "green",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "suffix: TB"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_repository_free_bytes{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"}) / 1024 / 1024 / 1024 / 1024 or vector(0)",
+          "instant": true,
+          "legendFormat": "Livre",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Espaço Livre Total (TB)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Soma da capacidade total dos repositórios, convertida de bytes para TB.\n\n**Por que importa:** Mostra o tamanho total da camada de armazenamento de backup.\n\n**Quando é problema:** Quando a capacidade total não acompanha o crescimento dos backups e a retenção exigida.\n\n**Ação recomendada:** Comparar com espaço livre e uso por repositório para planejar expansão.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#6C5CE7",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#6C5CE7",
+                "value": null
+              }
+            ]
+          },
+          "unit": "suffix: TB"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "sum(veeam_repository_capacity_bytes{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"}) / 1024 / 1024 / 1024 / 1024 or vector(0)",
+          "instant": true,
+          "legendFormat": "Capacidade",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Capacidade Total (TB)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Quantidade de SOBRs com uso acima de 85%.\n\n**Por que importa:** Um SOBR pressionado pode causar falhas de placement, retenção ou offload.\n\n**Quando é problema:** Qualquer SOBR acima de 85% precisa de análise do tier e dos extents.\n\n**Ação recomendada:** Verificar a tabela \"Uso do SOBR\" e a seção de extents para localizar o gargalo.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count(veeam_sobr_usage_ratio{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} > 0.85) or vector(0)",
+          "instant": true,
+          "legendFormat": "SOBR em risco",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "SOBRs em Risco (>85%)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Média percentual de uso dos SOBRs monitorados.\n\n**Por que importa:** Mostra a pressão geral sobre a camada de Scale-Out Backup Repository.\n\n**Quando é problema:** Acima de 70% exige acompanhamento; acima de 85% indica risco alto.\n\n**Ação recomendada:** Verificar a tabela \"Uso do SOBR\" e confirmar se algum tier ou extent exige expansão.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "avg(veeam_sobr_usage_ratio{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"}) * 100 or vector(0)",
+          "instant": true,
+          "legendFormat": "Uso médio",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Uso Médio dos SOBRs (%)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Bloco de comparação direta de capacidade por repositório.\n\n**Por que importa:** Ajuda a identificar onde está o consumo de storage.\n\n**Quando é problema:** Repositórios acima de 70% merecem acompanhamento; acima de 85% exigem ação.\n\n**Ação recomendada:** Priorizar os repositórios com maior percentual de uso e menor espaço livre.",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Capacidade por Repositório",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Tabela com capacidade total, usado, livre e percentual de uso por repositório.\n\n**Por que importa:** Centraliza a decisão operacional de onde existe risco de falta de espaço.\n\n**Quando é problema:** Percentual acima de 70% indica atenção e acima de 85% indica risco alto.\n\n**Ação recomendada:** Aumentar capacidade, revisar retenção, balancear workloads ou mover backups do repositório crítico.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Repositório"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "% de Uso"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gradient-gauge"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^(Capacidade|Usado|Livre) \\(TB\\)$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix: TB"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 16,
+        "x": 0,
+        "y": 7
+      },
+      "id": 9,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "% de Uso"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_capacity_bytes{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} / 1024 / 1024 / 1024 / 1024",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{repository_name}}",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_used_bytes{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} / 1024 / 1024 / 1024 / 1024",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{repository_name}}",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_free_bytes{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} / 1024 / 1024 / 1024 / 1024",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{repository_name}}",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} * 100",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{repository_name}}",
+          "range": false,
+          "refId": "D"
+        }
+      ],
+      "title": "Capacidade por Repositório",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #A": 4,
+              "Value #B": 5,
+              "Value #C": 6,
+              "Value #D": 7,
+              "backup_server": 3,
+              "repository_name": 0,
+              "repository_type": 1,
+              "state": 2
+            },
+            "renameByName": {
+              "Value #A": "Capacidade (TB)",
+              "Value #B": "Usado (TB)",
+              "Value #C": "Livre (TB)",
+              "Value #D": "% de Uso",
+              "backup_server": "Backup Server",
+              "repository_name": "Repositório",
+              "repository_type": "Tipo",
+              "state": "Estado"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Barra comparativa do percentual de uso por repositório.\n\n**Por que importa:** Permite identificar rapidamente quais repositórios estão mais próximos do limite.\n\n**Quando é problema:** Acima de 70% exige acompanhamento; acima de 85% exige ação.\n\n**Ação recomendada:** Tratar primeiro os repositórios vermelhos e verificar livre total em TB.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 7
+      },
+      "id": 10,
+      "options": {
+        "displayMode": "gradient",
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} * 100",
+          "instant": true,
+          "legendFormat": "{{repository_name}}",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Uso do Repositório (%)",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Bloco temporal com a evolução real do uso observado pelo Prometheus.\n\n**Por que importa:** Ajuda a identificar crescimento sustentado sem simular tendência.\n\n**Quando é problema:** Curvas subindo de forma contínua e próximas de 85% indicam risco operacional.\n\n**Ação recomendada:** Usar a curva para priorizar expansão ou mudança de retenção com base em histórico real de scrapes.",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 11,
+      "panels": [],
+      "title": "Utilização ao Longo do Tempo",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Série temporal do percentual de uso por repositório.\n\n**Por que importa:** Mostra crescimento real capturado pelo Prometheus e ajuda a entender velocidade de consumo.\n\n**Quando é problema:** Linha acima de 70% merece acompanhamento; acima de 85% indica risco alto.\n\n**Ação recomendada:** Validar repositórios com crescimento contínuo e planejar expansão antes do esgotamento.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 12,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "mean",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} * 100",
+          "legendFormat": "{{repository_name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Uso dos Repositórios ao Longo do Tempo (%)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Bloco de priorização por maior percentual de uso.\n\n**Por que importa:** Ajuda NOC e administração a decidirem onde agir primeiro.\n\n**Quando é problema:** Barras acima de 85% indicam risco alto.\n\n**Ação recomendada:** Tratar primeiro o topo do ranking e confirmar se há política de retenção ou workload concentrando uso.",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 27
+      },
+      "id": 13,
+      "panels": [],
+      "title": "Top Repositórios em Risco",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Ranking dos repositórios com maior percentual de uso.\n\n**Por que importa:** Mostra onde a ação deve ser priorizada para evitar falhas por falta de espaço.\n\n**Quando é problema:** Qualquer item acima de 85% é crítico; acima de 70% já deve entrar em acompanhamento.\n\n**Ação recomendada:** Expandir, mover backups, revisar retenção ou redistribuir carga nos repositórios mais críticos.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 28
+      },
+      "id": 14,
+      "options": {
+        "displayMode": "gradient",
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "topk(10, veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} * 100)",
+          "instant": true,
+          "legendFormat": "{{repository_name}}",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Top Repositórios com Maior Uso",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Bloco de capacidade dos Scale-Out Backup Repositories.\n\n**Por que importa:** SOBR concentra tiers e extents; problemas aqui impactam placement e retenção.\n\n**Quando é problema:** Uso acima de 85% ou extents desbalanceados indicam risco.\n\n**Ação recomendada:** Conferir capacidade total, espaço livre e tiers antes de alterar política de retenção ou offload.",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "id": 15,
+      "panels": [],
+      "title": "SOBR (Scale-Out Backup Repository)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Tabela com capacidade, uso, espaço livre, percentual de uso e quantidade de extents por SOBR.\n\n**Por que importa:** Mostra risco agregado em Scale-Out Repositories e ajuda a validar tiers.\n\n**Quando é problema:** SOBR acima de 85% ou com poucos extents disponíveis pode limitar placement.\n\n**Ação recomendada:** Validar tiers, extents e políticas de capacidade antes de novos backups ou retenções longas.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "% de Uso"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gradient-gauge"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^(Capacidade|Usado|Livre) \\(TB\\)$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix: TB"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 16,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "% de Uso"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_capacity_bytes{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} / 1024 / 1024 / 1024 / 1024",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{sobr_name}}",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_used_bytes{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} / 1024 / 1024 / 1024 / 1024",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{sobr_name}}",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_free_bytes{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} / 1024 / 1024 / 1024 / 1024",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{sobr_name}}",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_usage_ratio{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} * 100",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{sobr_name}}",
+          "range": false,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_extents_total{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"}",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{sobr_name}}",
+          "range": false,
+          "refId": "E"
+        }
+      ],
+      "title": "Uso do SOBR",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #A": 5,
+              "Value #B": 6,
+              "Value #C": 7,
+              "Value #D": 8,
+              "Value #E": 9,
+              "archive_tier": 4,
+              "backup_server": 1,
+              "capacity_tier": 3,
+              "performance_tier": 2,
+              "sobr_name": 0
+            },
+            "renameByName": {
+              "Value #A": "Capacidade (TB)",
+              "Value #B": "Usado (TB)",
+              "Value #C": "Livre (TB)",
+              "Value #D": "% de Uso",
+              "Value #E": "Extents",
+              "archive_tier": "Archive Tier",
+              "backup_server": "Backup Server",
+              "capacity_tier": "Capacity Tier",
+              "performance_tier": "Performance Tier",
+              "sobr_name": "SOBR"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Bloco avançado para análise dos extents de SOBR, quando o payload oficial expõe extents.\n\n**Por que importa:** Identifica desequilíbrio entre extents e risco localizado dentro do SOBR.\n\n**Quando é problema:** Um extent muito mais cheio que os demais pode causar gargalo ou falha de placement.\n\n**Ação recomendada:** Balancear capacidade, validar políticas do SOBR e investigar extents em vermelho.",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 47
+      },
+      "id": 17,
+      "panels": [],
+      "title": "Extents do SOBR",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Tabela com capacidade, uso e livre por extent de SOBR, quando disponível.\n\n**Por que importa:** Mostra desequilíbrio e risco específico em cada extent.\n\n**Quando é problema:** Extents acima de 85% ou muito diferentes dos demais indicam necessidade de balanceamento.\n\n**Ação recomendada:** Investigar o extent crítico e planejar redistribuição ou expansão de capacidade.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "% de Uso"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gradient-gauge"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^(Capacidade|Usado|Livre) \\(TB\\)$/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "suffix: TB"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 48
+      },
+      "id": 18,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "% de Uso"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_extent_capacity_bytes{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} / 1024 / 1024 / 1024 / 1024",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{sobr_name}} / {{extent_name}}",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_extent_used_bytes{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} / 1024 / 1024 / 1024 / 1024",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{sobr_name}} / {{extent_name}}",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_extent_free_bytes{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} / 1024 / 1024 / 1024 / 1024",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{sobr_name}} / {{extent_name}}",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "veeam_sobr_extent_used_bytes{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} / veeam_sobr_extent_capacity_bytes{sobr_name=~\"$sobr_name\",backup_server=~\"$backup_server\"} * 100",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "{{sobr_name}} / {{extent_name}}",
+          "range": false,
+          "refId": "D"
+        }
+      ],
+      "title": "Distribuição por Extent",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "__name__": true,
+              "app": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Value #A": 4,
+              "Value #B": 5,
+              "Value #C": 6,
+              "Value #D": 7,
+              "backup_server": 3,
+              "extent_name": 1,
+              "extent_type": 2,
+              "sobr_name": 0
+            },
+            "renameByName": {
+              "Value #A": "Capacidade (TB)",
+              "Value #B": "Usado (TB)",
+              "Value #C": "Livre (TB)",
+              "Value #D": "% de Uso",
+              "backup_server": "Backup Server",
+              "extent_name": "Extent",
+              "extent_type": "Tipo do Extent",
+              "sobr_name": "SOBR"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Bloco de distribuição de risco dos repositórios por faixa de uso.\n\n**Por que importa:** Oferece leitura rápida do tamanho do problema para NOC, admin e gestor.\n\n**Quando é problema:** Faixas 70-85% e acima de 85% concentrando muitos repositórios indicam risco de capacidade.\n\n**Ação recomendada:** Priorizar remediação dos itens acima de 85% e acompanhar os que estão entre 70% e 85%.",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 58
+      },
+      "id": 19,
+      "panels": [],
+      "title": "Distribuição de Uso",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que é:** Quantidade de repositórios por faixa de uso.\n\n**Por que importa:** Mostra se o ambiente está saudável ou acumulando risco de capacidade.\n\n**Quando é problema:** Muitos repositórios em 70-85% ou acima de 85% indicam necessidade de ação.\n\n**Ação recomendada:** Atuar nos repositórios acima de 85% e revisar tendência dos que estão entre 70% e 85%.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^0-50%$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^50-70%$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^70-85%$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/^>85%$/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 59
+      },
+      "id": 20,
+      "options": {
+        "displayMode": "gradient",
+        "maxVizHeight": 300,
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count(veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} < 0.5) or vector(0)",
+          "instant": true,
+          "legendFormat": "0-50%",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count((veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} >= 0.5) and (veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} < 0.7)) or vector(0)",
+          "instant": true,
+          "legendFormat": "50-70%",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count((veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} >= 0.7) and (veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} < 0.85)) or vector(0)",
+          "instant": true,
+          "legendFormat": "70-85%",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count(veeam_repository_usage_ratio{repository_name=~\"$repository_name\",repository_type=~\"$repository_type\",backup_server=~\"$backup_server\"} >= 0.85) or vector(0)",
+          "instant": true,
+          "legendFormat": ">85%",
+          "range": false,
+          "refId": "D"
+        }
+      ],
+      "title": "Distribuição de Uso dos Repositórios",
+      "type": "bargauge"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 42,
+  "tags": [
+    "veeam",
+    "repositories",
+    "capacity",
+    "sre"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Fonte de Dados",
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(veeam_repository_usage_ratio, repository_name)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Repositório",
+        "multi": true,
+        "name": "repository_name",
+        "options": [],
+        "query": {
+          "query": "label_values(veeam_repository_usage_ratio, repository_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(veeam_repository_usage_ratio, repository_type)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Tipo de Repositório",
+        "multi": true,
+        "name": "repository_type",
+        "options": [],
+        "query": {
+          "query": "label_values(veeam_repository_usage_ratio, repository_type)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values({__name__=~\"veeam_repository_usage_ratio|veeam_sobr_usage_ratio|veeam_sobr_extent_capacity_bytes\"}, backup_server)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Backup Server",
+        "multi": true,
+        "name": "backup_server",
+        "options": [],
+        "query": {
+          "query": "label_values({__name__=~\"veeam_repository_usage_ratio|veeam_sobr_usage_ratio|veeam_sobr_extent_capacity_bytes\"}, backup_server)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(veeam_sobr_usage_ratio, sobr_name)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "SOBR",
+        "multi": true,
+        "name": "sobr_name",
+        "options": [],
+        "query": {
+          "query": "label_values(veeam_sobr_usage_ratio, sobr_name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Veeam ONE - Repositórios e Capacidade",
+  "uid": "veeam-one-repositories-capacity",
+  "version": 1,
+  "weekStart": ""
+}

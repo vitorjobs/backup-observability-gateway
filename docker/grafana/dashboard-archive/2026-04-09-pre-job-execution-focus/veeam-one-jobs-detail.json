@@ -158,192 +158,6 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "**O que mostra:** Quantidade de jobs VMware dentro do filtro aplicado.\n\n**Como interpretar:** Ajuda a separar rapidamente o peso do ambiente virtual no drill-down.\n\n**Por que importa:** É útil quando a visão detalhada mistura VMware e TAPE.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "#2563eb"
-          },
-          "mappings": [
-            {
-              "type": "special",
-              "options": {
-                "match": "nan",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "empty",
-                "result": {
-                  "text": "0"
-                }
-              }
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#2563eb",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 4,
-        "y": 1
-      },
-      "id": 2,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "area",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "value",
-        "wideLayout": true
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "count(veeam_job_status{job_type=\"vm_backup\", job_name=~\"$job_name\", status=~\"$status\"}) or vector(0)",
-          "instant": true,
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "Jobs VMware",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "**O que mostra:** Quantidade de jobs TAPE dentro do filtro aplicado.\n\n**Como interpretar:** Ajuda a separar rapidamente o peso da camada de fita no drill-down.\n\n**Por que importa:** É útil quando a visão detalhada mistura VMware e TAPE.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "#f59e0b"
-          },
-          "mappings": [
-            {
-              "type": "special",
-              "options": {
-                "match": "nan",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "empty",
-                "result": {
-                  "text": "0"
-                }
-              }
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#f59e0b",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 8,
-        "y": 1
-      },
-      "id": 3,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "area",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "value",
-        "wideLayout": true
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "count(veeam_job_status{job_type=\"backup_to_tape\", job_name=~\"$job_name\", status=~\"$status\"}) or vector(0)",
-          "instant": true,
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "Jobs TAPE",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
       "description": "**O que mostra:** Soma do volume transferido conhecido dentro do recorte atual.\n\n**Como interpretar:** Ajuda a medir o peso operacional do subconjunto analisado.\n\n**Por que importa:** É útil para comparar jobs críticos entre si.",
       "fieldConfig": {
         "defaults": {
@@ -396,10 +210,10 @@
       "gridPos": {
         "h": 4,
         "w": 6,
-        "x": 12,
+        "x": 6,
         "y": 1
       },
-      "id": 4,
+      "id": 2,
       "options": {
         "colorMode": "background",
         "graphMode": "area",
@@ -437,7 +251,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "**O que mostra:** Média da duração da última execução dentro do recorte atual.\n\n**Como interpretar:** Use para avaliar quão pesada está a seleção aplicada em horas ou minutos aproximados.\n\n**Por que importa:** Ajuda a comparar grupos de jobs e validar impacto operacional.",
+      "description": "**O que mostra:** Média da duração da última execução dentro do recorte atual.\n\n**Como interpretar:** Use para avaliar quão pesada está a seleção aplicada.\n\n**Por que importa:** Ajuda a comparar grupos de jobs e validar impacto operacional.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -482,17 +296,17 @@
               }
             ]
           },
-          "unit": "dtdurations"
+          "unit": "s"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 4,
         "w": 6,
-        "x": 18,
+        "x": 12,
         "y": 1
       },
-      "id": 5,
+      "id": 3,
       "options": {
         "colorMode": "background",
         "graphMode": "area",
@@ -526,6 +340,106 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Maior intervalo desde a última execução válida no recorte atual.\n\n**Como interpretar:** Valores altos expõem jobs que deixaram de rodar por muito tempo.\n\n**Por que importa:** É um indicador objetivo de criticidade operacional.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 86400
+              },
+              {
+                "color": "red",
+                "value": 172800
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "max((time() - job_last_run_timestamp_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"}) and on(job_name, job_type, status) (job_last_run_timestamp_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"} > 0)) or vector(0)",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Maior Aging",
+      "type": "stat"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
@@ -543,7 +457,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "**O que mostra:** Tabela operacional consolidada dos jobs com tipo, status, última execução, duração e volume.\n\n**Como interpretar:** Use paginação, ordenação e filtros de coluna para investigar rapidamente jobs específicos.\n\n**Por que importa:** É a visão mais rica para apoiar decisão operacional de curto prazo.",
+      "description": "**O que mostra:** Tabela operacional consolidada dos jobs com tipo, status, última execução, duração, volume e plataforma.\n\n**Como interpretar:** Use paginação, ordenação e filtros de coluna para investigar rapidamente jobs específicos.\n\n**Por que importa:** É a visão mais rica para apoiar decisão operacional de curto prazo.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -600,46 +514,6 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Tipo"
-            },
-            "properties": [
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "value",
-                    "options": {
-                      "vm_backup": {
-                        "color": "#2563eb",
-                        "text": "VMware"
-                      },
-                      "backup_to_tape": {
-                        "color": "#f59e0b",
-                        "text": "TAPE"
-                      },
-                      "backup_copy": {
-                        "color": "#14b8a6",
-                        "text": "Backup Copy"
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "custom.cellOptions",
-                "value": {
-                  "type": "color-background"
-                }
-              },
-              {
-                "id": "custom.width",
-                "value": 120
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "Status"
             },
             "properties": [
@@ -663,7 +537,7 @@
                       },
                       "warning": {
                         "color": "orange",
-                        "text": "Alerta"
+                        "text": "Warning"
                       },
                       "running": {
                         "color": "blue",
@@ -679,11 +553,11 @@
                       },
                       "disabled": {
                         "color": "#6b7280",
-                        "text": "Idle"
+                        "text": "Desabilitado"
                       },
                       "none": {
                         "color": "#6b7280",
-                        "text": "Idle"
+                        "text": "Sem execução"
                       },
                       "unknown": {
                         "color": "#9ca3af",
@@ -713,7 +587,7 @@
             "properties": [
               {
                 "id": "unit",
-                "value": "dateTimeAsLocal"
+                "value": "dateTimeAsIso"
               },
               {
                 "id": "custom.width",
@@ -729,7 +603,7 @@
             "properties": [
               {
                 "id": "unit",
-                "value": "dtdurations"
+                "value": "s"
               }
             ]
           },
@@ -753,7 +627,7 @@
         "x": 0,
         "y": 6
       },
-      "id": 6,
+      "id": 5,
       "options": {
         "cellHeight": "sm",
         "enablePagination": true,
@@ -772,7 +646,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "veeam_job_info{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
+          "expr": "veeam_job_info{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"}",
           "format": "table",
           "instant": true,
           "range": false,
@@ -796,7 +670,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "veeam_job_last_run_timestamp_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
+          "expr": "job_last_run_timestamp_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"}",
           "format": "table",
           "instant": true,
           "range": false,
@@ -808,7 +682,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "veeam_job_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
+          "expr": "job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"}",
           "format": "table",
           "instant": true,
           "range": false,
@@ -820,7 +694,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "veeam_job_avg_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
+          "expr": "veeam_job_avg_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"}",
           "format": "table",
           "instant": true,
           "range": false,
@@ -832,7 +706,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "veeam_job_transferred_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\"} and on(job_name, job_type) (veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
+          "expr": "job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"}",
           "format": "table",
           "instant": true,
           "range": false,
@@ -852,24 +726,23 @@
               "Time": true,
               "Value": true,
               "__name__": true,
-              "app": true,
-              "environment": true,
               "instance": true,
-              "job": true,
-              "platform": true
+              "job": true
             },
             "indexByName": {
               "job_name": 0,
               "job_type": 1,
-              "status": 2,
-              "Value #C": 3,
-              "Value #D": 4,
-              "Value #E": 5,
-              "Value #F": 6
+              "platform": 2,
+              "status": 3,
+              "Value #C": 4,
+              "Value #D": 5,
+              "Value #E": 6,
+              "Value #F": 7
             },
             "renameByName": {
               "job_name": "Job",
               "job_type": "Tipo",
+              "platform": "Plataforma",
               "status": "Status",
               "Value #C": "Última execução",
               "Value #D": "Duração última execução",
@@ -899,7 +772,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "**O que mostra:** Ranking dos jobs VMware com maior duração da última execução no filtro aplicado.\n\n**Como interpretar:** Os itens do topo concentram maior risco de impactar a janela do ambiente virtual.\n\n**Por que importa:** Ajuda a priorizar a investigação de lentidão em VMware.",
+      "description": "**O que mostra:** Ranking dos jobs com maior duração da última execução no filtro aplicado.\n\n**Como interpretar:** Jobs no topo concentram maior risco de impacto na janela.\n\n**Por que importa:** Ajuda a decidir rapidamente onde investigar lentidão.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -934,51 +807,144 @@
               }
             }
           ],
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 70
-              },
-              {
-                "color": "red",
-                "value": 85
               }
             ]
           },
-          "unit": "dtdurations"
+          "unit": "s"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
-        "w": 6,
+        "w": 8,
         "x": 0,
+        "y": 19
+      },
+      "id": 6,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "topk(15, job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
+          "instant": true,
+          "legendFormat": "{{job_name}}",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Top Jobs por Duração",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "**O que mostra:** Ranking dos jobs com maior volume transferido conhecido dentro do filtro.\n\n**Como interpretar:** Jobs com mais dados tendem a pressionar janela, rede e storage.\n\n**Por que importa:** Ajuda a diferenciar gargalo de volume de gargalo de performance.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "nan",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "0"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "empty",
+                "result": {
+                  "text": "0"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
         "y": 19
       },
       "id": 7,
       "options": {
-        "displayMode": "gradient",
-        "minVizHeight": 16,
-        "minVizWidth": 16,
-        "namePlacement": "left",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "showUnfilled": true,
-        "sizing": "manual",
-        "valueMode": "color"
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
       },
       "targets": [
         {
@@ -987,22 +953,22 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "topk(10, job_last_run_duration_seconds{job_type=\"vm_backup\", job_name=~\"$job_name\", status=~\"$status\"})",
+          "expr": "topk(15, job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
           "instant": true,
           "legendFormat": "{{job_name}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "VMware: Maiores Durações",
-      "type": "bargauge"
+      "title": "Top Jobs por Volume",
+      "type": "barchart"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "**O que mostra:** Ranking dos jobs TAPE com maior duração da última execução no filtro aplicado.\n\n**Como interpretar:** Os itens do topo sinalizam maior risco de alongar a operação em fita.\n\n**Por que importa:** Ajuda a priorizar a investigação de lentidão em TAPE.",
+      "description": "**O que mostra:** Ranking dos jobs que estão há mais tempo sem executar com sucesso visível na coleta.\n\n**Como interpretar:** Os itens no topo podem indicar jobs abandonados, com falha crônica ou sem janela recente.\n\n**Por que importa:** Ajuda a descobrir risco escondido mesmo em ambientes com boa taxa média.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1037,51 +1003,46 @@
               }
             }
           ],
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 70
-              },
-              {
-                "color": "red",
-                "value": 85
               }
             ]
           },
-          "unit": "dtdurations"
+          "unit": "s"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 6,
+        "w": 8,
+        "x": 16,
         "y": 19
       },
       "id": 8,
       "options": {
-        "displayMode": "gradient",
-        "minVizHeight": 16,
-        "minVizWidth": 16,
-        "namePlacement": "left",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "barRadius": 0,
+        "barWidth": 0.8,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "showUnfilled": true,
-        "sizing": "manual",
-        "valueMode": "color"
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
       },
       "targets": [
         {
@@ -1090,221 +1051,15 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "topk(10, job_last_run_duration_seconds{job_type=\"backup_to_tape\", job_name=~\"$job_name\", status=~\"$status\"})",
+          "expr": "topk(15, (time() - job_last_run_timestamp_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"}) and on(job_name, job_type, status) (job_last_run_timestamp_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"} > 0))",
           "instant": true,
           "legendFormat": "{{job_name}}",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "TAPE: Maiores Durações",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "**O que mostra:** Ranking dos jobs VMware com maior volume transferido conhecido dentro do filtro.\n\n**Como interpretar:** Jobs com mais dados tendem a pressionar rede, storage e janela do ambiente virtual.\n\n**Por que importa:** Ajuda a diferenciar gargalo de volume de gargalo de performance.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [
-            {
-              "type": "special",
-              "options": {
-                "match": "nan",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "empty",
-                "result": {
-                  "text": "0"
-                }
-              }
-            }
-          ],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 70
-              },
-              {
-                "color": "red",
-                "value": 85
-              }
-            ]
-          },
-          "unit": "decbytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 12,
-        "y": 19
-      },
-      "id": 9,
-      "options": {
-        "displayMode": "gradient",
-        "minVizHeight": 16,
-        "minVizWidth": 16,
-        "namePlacement": "left",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "sizing": "manual",
-        "valueMode": "color"
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "topk(10, job_last_transferred_data_bytes{job_type=\"vm_backup\", job_name=~\"$job_name\", status=~\"$status\"})",
-          "instant": true,
-          "legendFormat": "{{job_name}}",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "VMware: Maiores Volumes",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "**O que mostra:** Ranking dos jobs TAPE com maior volume transferido conhecido dentro do filtro.\n\n**Como interpretar:** Jobs com mais dados tendem a pressionar throughput e janela da camada de fita.\n\n**Por que importa:** Ajuda a priorizar a investigação de cargas mais pesadas em TAPE.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [
-            {
-              "type": "special",
-              "options": {
-                "match": "nan",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "empty",
-                "result": {
-                  "text": "0"
-                }
-              }
-            }
-          ],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 70
-              },
-              {
-                "color": "red",
-                "value": 85
-              }
-            ]
-          },
-          "unit": "decbytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 18,
-        "y": 19
-      },
-      "id": 10,
-      "options": {
-        "displayMode": "gradient",
-        "minVizHeight": 16,
-        "minVizWidth": 16,
-        "namePlacement": "left",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "sizing": "manual",
-        "valueMode": "color"
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "topk(10, job_last_transferred_data_bytes{job_type=\"backup_to_tape\", job_name=~\"$job_name\", status=~\"$status\"})",
-          "instant": true,
-          "legendFormat": "{{job_name}}",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "TAPE: Maiores Volumes",
-      "type": "bargauge"
+      "title": "Top Jobs por Aging",
+      "type": "barchart"
     },
     {
       "collapsed": false,
@@ -1324,7 +1079,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "**O que mostra:** Mostra a evolução temporal do volume transferido conhecido, com separação entre total, VMware e TAPE.\n\n**Como interpretar:** Picos indicam maior pressão de dados e ajudam a explicar janelas mais pesadas.\n\n**Por que importa:** É essencial para diferenciar crescimento geral de crescimento concentrado em um tipo específico.",
+      "description": "**O que mostra:** Mostra a evolução temporal do volume transferido conhecido para o recorte selecionado.\n\n**Como interpretar:** Picos indicam maior pressão de dados e ajudam a explicar janelas mais pesadas.\n\n**Por que importa:** É essencial para diferenciar crescimento de volume de outros tipos de gargalo.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1333,22 +1088,21 @@
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
-            "axisColorMode": "text",
             "drawStyle": "line",
-            "fillOpacity": 18,
-            "gradientMode": "opacity",
+            "fillOpacity": 10,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "smooth",
-            "lineWidth": 3,
-            "pointSize": 5,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": true,
             "stacking": {
               "group": "A",
@@ -1398,53 +1152,7 @@
           },
           "unit": "decbytes"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Volume total"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#0f766e",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Volume VMware"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#06b6d4",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Volume TAPE"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f97316",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -1452,15 +1160,10 @@
         "x": 0,
         "y": 28
       },
-      "id": 11,
+      "id": 9,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1478,36 +1181,12 @@
           "editorMode": "code",
           "expr": "sum(job_last_transferred_data_bytes{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
           "instant": false,
-          "legendFormat": "Volume total",
+          "legendFormat": "Volume",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(job_last_transferred_data_bytes{job_type=\"vm_backup\", job_name=~\"$job_name\", status=~\"$status\"})",
-          "instant": false,
-          "legendFormat": "Volume VMware",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(job_last_transferred_data_bytes{job_type=\"backup_to_tape\", job_name=~\"$job_name\", status=~\"$status\"})",
-          "instant": false,
-          "legendFormat": "Volume TAPE",
-          "range": true,
-          "refId": "C"
         }
       ],
-      "title": "Volume Transferido por Tipo",
+      "title": "Volume Transferido Conhecido",
       "type": "timeseries"
     },
     {
@@ -1515,7 +1194,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "**O que mostra:** Mostra a evolução temporal da duração média da última execução em comparação com a média histórica dos jobs filtrados.\n\n**Como interpretar:** Elevações persistentes sugerem lentidão operacional ou mudança importante no perfil da carga.\n\n**Por que importa:** Ajuda a validar se o problema está no tempo de processamento e não apenas no volume.",
+      "description": "**O que mostra:** Mostra a evolução temporal da duração média da última execução no recorte selecionado.\n\n**Como interpretar:** Elevações persistentes sugerem lentidão operacional ou mudança importante no perfil da carga.\n\n**Por que importa:** Ajuda a validar se o problema está no tempo de processamento e não apenas no volume.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1524,22 +1203,21 @@
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
-            "axisColorMode": "text",
             "drawStyle": "line",
-            "fillOpacity": 18,
-            "gradientMode": "opacity",
+            "fillOpacity": 10,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "smooth",
-            "lineWidth": 3,
-            "pointSize": 5,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": true,
             "stacking": {
               "group": "A",
@@ -1587,40 +1265,9 @@
               }
             ]
           },
-          "unit": "dtdurations"
+          "unit": "s"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Última execução"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#2563eb",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Média histórica"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#a855f7",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -1628,15 +1275,10 @@
         "x": 12,
         "y": 28
       },
-      "id": 12,
+      "id": 10,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1654,24 +1296,12 @@
           "editorMode": "code",
           "expr": "avg(job_last_run_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
           "instant": false,
-          "legendFormat": "Última execução",
+          "legendFormat": "Duração média",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "avg(veeam_job_avg_duration_seconds{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)",
-          "instant": false,
-          "legendFormat": "Média histórica",
-          "range": true,
-          "refId": "B"
         }
       ],
-      "title": "Duração Média e Histórica",
+      "title": "Duração Média do Filtro",
       "type": "timeseries"
     },
     {
@@ -1679,7 +1309,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "**O que mostra:** Mostra a evolução temporal dos principais estados operacionais dentro do filtro selecionado.\n\n**Como interpretar:** Mudanças ajudam a perceber se a degradação está concentrada, intermitente ou em expansão.\n\n**Por que importa:** É útil para entender o comportamento operacional do recorte ao longo da janela.",
+      "description": "**O que mostra:** Mostra quantos jobs permanecem dentro do filtro selecionado a cada instante.\n\n**Como interpretar:** Mudanças ajudam a perceber se a seleção atual é estável ou transitória.\n\n**Por que importa:** É útil para entender se o problema está concentrado ou se oscila ao longo da janela.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1688,22 +1318,21 @@
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
-            "axisColorMode": "text",
             "drawStyle": "line",
-            "fillOpacity": 18,
-            "gradientMode": "opacity",
+            "fillOpacity": 10,
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "smooth",
-            "lineWidth": 3,
-            "pointSize": 5,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": true,
             "stacking": {
               "group": "A",
@@ -1753,287 +1382,18 @@
           },
           "unit": "short"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Sucesso"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#22c55e",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Alerta"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f59e0b",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Falha"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#ef4444",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Em execução"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#3b82f6",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 36
       },
-      "id": 13,
+      "id": 11,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(success_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)",
-          "instant": false,
-          "legendFormat": "Sucesso",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "count(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\", status=\"warning\"}) or vector(0)",
-          "instant": false,
-          "legendFormat": "Alerta",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(failed_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)",
-          "instant": false,
-          "legendFormat": "Falha",
-          "range": true,
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum(active_jobs{job_type=~\"$job_type\", job_name=~\"$job_name\"}) or vector(0)",
-          "instant": false,
-          "legendFormat": "Em execução",
-          "range": true,
-          "refId": "D"
-        }
-      ],
-      "title": "Estado Operacional do Filtro",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "**O que mostra:** Mostra quantos jobs permanecem no filtro em cada instante, com separação entre total, VMware e TAPE.\n\n**Como interpretar:** Mudanças ajudam a perceber se a seleção atual é estável ou se oscila ao longo da janela.\n\n**Por que importa:** É útil para validar se o problema está concentrado em um tipo de job.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "drawStyle": "line",
-            "fillOpacity": 18,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "smooth",
-            "lineWidth": 3,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [
-            {
-              "type": "special",
-              "options": {
-                "match": "nan",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "0"
-                }
-              }
-            },
-            {
-              "type": "special",
-              "options": {
-                "match": "empty",
-                "result": {
-                  "text": "0"
-                }
-              }
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Total"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#475569",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "VMware"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#2563eb",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "TAPE"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f59e0b",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 36
-      },
-      "id": 14,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -2051,36 +1411,12 @@
           "editorMode": "code",
           "expr": "count(veeam_job_status{job_type=~\"$job_type\", job_name=~\"$job_name\", status=~\"$status\"})",
           "instant": false,
-          "legendFormat": "Total",
+          "legendFormat": "Jobs no filtro",
           "range": true,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "count(veeam_job_status{job_type=\"vm_backup\", job_name=~\"$job_name\", status=~\"$status\"})",
-          "instant": false,
-          "legendFormat": "VMware",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "count(veeam_job_status{job_type=\"backup_to_tape\", job_name=~\"$job_name\", status=~\"$status\"})",
-          "instant": false,
-          "legendFormat": "TAPE",
-          "range": true,
-          "refId": "C"
         }
       ],
-      "title": "Contagem de Jobs por Tipo",
+      "title": "Contagem de Jobs no Filtro",
       "type": "timeseries"
     }
   ],
@@ -2121,7 +1457,7 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
-        "definition": "label_values(veeam_job_info{job_type=~\"vm_backup|backup_to_tape\"}, job_type)",
+        "definition": "label_values(veeam_job_info, job_type)",
         "hide": 0,
         "includeAll": true,
         "label": "Tipo de job",
@@ -2129,7 +1465,7 @@
         "name": "job_type",
         "options": [],
         "query": {
-          "query": "label_values(veeam_job_info{job_type=~\"vm_backup|backup_to_tape\"}, job_type)",
+          "query": "label_values(veeam_job_info, job_type)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -2201,6 +1537,6 @@
   "timezone": "browser",
   "title": "Veeam ONE - Detalhamento Operacional de Jobs",
   "uid": "veeam-one-jobs-detail",
-  "version": 3,
+  "version": 2,
   "weekStart": ""
 }

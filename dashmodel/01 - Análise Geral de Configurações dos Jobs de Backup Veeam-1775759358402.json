@@ -1,0 +1,3257 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 34,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Inventário técnico completo de todos os jobs de backup Veeam. Mantém todos os campos do dashboard original — nome do job, status, prioridade, retenção, agenda, modo de backup, compressão e destino de storage — e agora inclui paginação nativa para facilitar a navegação em ambientes com muitos jobs.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 400
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-purple",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "purple",
+                    "text": "🔷 7CTA",
+                    "type": 1,
+                    "value": "7CTA"
+                  },
+                  {
+                    "color": "blue",
+                    "text": "🔷 1CTA",
+                    "type": 1,
+                    "value": "1CTA"
+                  },
+                  {
+                    "color": "green",
+                    "text": "💾 BACKUP",
+                    "type": 1,
+                    "value": "BACKUP"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "#00B383",
+                    "text": "✅ ATIVO",
+                    "type": 1,
+                    "value": "Habilitado"
+                  },
+                  {
+                    "color": "#FF4D4D",
+                    "text": "⛔ INATIVO",
+                    "type": 1,
+                    "value": "Desabilitado"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Prioridade"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#FF4D4D",
+                      "value": 0
+                    },
+                    {
+                      "color": "#FFA64D",
+                      "value": 1
+                    },
+                    {
+                      "color": "#4DC3FF",
+                      "value": 2
+                    },
+                    {
+                      "color": "#B266FF",
+                      "value": 3
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "#FF4D4D",
+                    "text": "🔴 CRÍTICA",
+                    "type": 1,
+                    "value": "High"
+                  },
+                  {
+                    "color": "#FFA64D",
+                    "text": "🟠 ALTA",
+                    "type": 1,
+                    "value": "Medium"
+                  },
+                  {
+                    "color": "#4DC3FF",
+                    "text": "🔵 NORMAL",
+                    "type": 1,
+                    "value": "Normal"
+                  },
+                  {
+                    "color": "#B266FF",
+                    "text": "🟣 BAIXA",
+                    "type": 1,
+                    "value": "Low"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Retenção"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 130
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#00B383",
+                      "value": 0
+                    },
+                    {
+                      "color": "#4DC3FF",
+                      "value": 8
+                    },
+                    {
+                      "color": "#FFA64D",
+                      "value": 15
+                    },
+                    {
+                      "color": "#FF6B6B",
+                      "value": 30
+                    },
+                    {
+                      "color": "#FF4D4D",
+                      "value": 60
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Política"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "#4DC3FF",
+                    "text": "📅 DIAS",
+                    "type": 1,
+                    "value": "Days"
+                  },
+                  {
+                    "color": "#B266FF",
+                    "text": "🔄 PONTOS",
+                    "type": 1,
+                    "value": "RestorePoints"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Frequência"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "#00B383",
+                    "text": "📆 DIÁRIO",
+                    "type": 1,
+                    "value": "DiÃ¡rio"
+                  },
+                  {
+                    "color": "#00B383",
+                    "text": "📆 DIÁRIO",
+                    "type": 1,
+                    "value": "Daily"
+                  },
+                  {
+                    "color": "#4DC3FF",
+                    "text": "📅 SEMANAL",
+                    "type": 1,
+                    "value": "Semanal"
+                  },
+                  {
+                    "color": "#4DC3FF",
+                    "text": "📅 SEMANAL",
+                    "type": 1,
+                    "value": "Weekly"
+                  },
+                  {
+                    "color": "#B266FF",
+                    "text": "📆 MENSAL",
+                    "type": 1,
+                    "value": "Mensal"
+                  },
+                  {
+                    "color": "#B266FF",
+                    "text": "📆 MENSAL",
+                    "type": 1,
+                    "value": "Monthly"
+                  },
+                  {
+                    "color": "#FFA64D",
+                    "text": "📅 TRIMESTRAL",
+                    "type": 1,
+                    "value": "Trimestral"
+                  },
+                  {
+                    "color": "#FF4D4D",
+                    "text": "📅 ANUAL",
+                    "type": 1,
+                    "value": "Anual"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Horário"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#B266FF",
+                      "value": 0
+                    },
+                    {
+                      "color": "#4DC3FF",
+                      "value": 6
+                    },
+                    {
+                      "color": "#00B383",
+                      "value": 12
+                    },
+                    {
+                      "color": "#FFA64D",
+                      "value": 18
+                    },
+                    {
+                      "color": "#FF4D4D",
+                      "value": 20
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-text"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Backup Full"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "#B266FF",
+                    "text": "🔄 SINTÉTICO",
+                    "type": 1,
+                    "value": "Synthetic Full"
+                  },
+                  {
+                    "color": "#FFA64D",
+                    "text": "⚡ ATIVO",
+                    "type": 1,
+                    "value": "Active Full"
+                  },
+                  {
+                    "color": "#4DC3FF",
+                    "text": "📈 INCREMENTAL",
+                    "type": 1,
+                    "value": "Incremental"
+                  },
+                  {
+                    "color": "#00B383",
+                    "text": "📊 DIFERENCIAL",
+                    "type": 1,
+                    "value": "Diferencial"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Compressão"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "#00B383",
+                    "text": "⚖️ OTIMIZADA",
+                    "type": 1,
+                    "value": "Optimal"
+                  },
+                  {
+                    "color": "#FFA64D",
+                    "text": "📦 ALTA",
+                    "type": 1,
+                    "value": "High"
+                  },
+                  {
+                    "color": "#4DC3FF",
+                    "text": "📄 BAIXA",
+                    "type": 1,
+                    "value": "Low"
+                  },
+                  {
+                    "color": "#FF4D4D",
+                    "text": "🚫 NENHUMA",
+                    "type": 1,
+                    "value": "None"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Modo"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "#4DC3FF",
+                    "text": "📈 INCREMENTAL",
+                    "type": 1,
+                    "value": "Incremental"
+                  },
+                  {
+                    "color": "#B266FF",
+                    "text": "📊 DIFERENCIAL",
+                    "type": 1,
+                    "value": "Differential"
+                  },
+                  {
+                    "color": "#FFA64D",
+                    "text": "💾 COMPLETO",
+                    "type": 1,
+                    "value": "Full"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Storage"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 200
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "#4DC3FF",
+                    "text": "💿 LOCAL",
+                    "type": 1,
+                    "value": "LocalTarget"
+                  },
+                  {
+                    "color": "#00B383",
+                    "text": "🌐 REDE",
+                    "type": 1,
+                    "value": "Network"
+                  },
+                  {
+                    "color": "#B266FF",
+                    "text": "☁️ NUVEM",
+                    "type": 1,
+                    "value": "Cloud"
+                  },
+                  {
+                    "color": "#FFA64D",
+                    "text": "🗜️ DEDUPLICADO",
+                    "type": 1,
+                    "value": "Dedupe"
+                  },
+                  {
+                    "color": "#FF6B6B",
+                    "text": "⚡ SAN",
+                    "type": 1,
+                    "value": "SAN"
+                  },
+                  {
+                    "color": "#FFB266",
+                    "text": "📦 OBJETOS",
+                    "type": 1,
+                    "value": "ObjectStorage"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "cellHeight": "md",
+        "enablePagination": true,
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "veeam_job_configuration",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "💻 INVENTÁRIO GERAL DE POLÍTICAS DE BACKUP",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "job_name",
+                "status",
+                "priority",
+                "retention_days",
+                "retention_type",
+                "schedule_type",
+                "schedule_time",
+                "full_backup_type",
+                "compression",
+                "backup_mode",
+                "storage_opt"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "backup_mode": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "backup_mode": 9,
+              "compression": 8,
+              "full_backup_type": 7,
+              "job_name": 0,
+              "priority": 2,
+              "retention_days": 3,
+              "retention_type": 4,
+              "schedule_time": 6,
+              "schedule_type": 5,
+              "status": 1,
+              "storage_opt": 10
+            },
+            "renameByName": {
+              "backup_mode": "🔄 Modo",
+              "compression": "🗜️ Compressão",
+              "full_backup_type": "💫 Backup Full",
+              "job_name": "📌 Job",
+              "priority": "🎯 Prioridade",
+              "retention_days": "⏳ Retenção",
+              "retention_type": "📋 Política",
+              "schedule_time": "⏰ Horário",
+              "schedule_type": "🕒 Frequência",
+              "status": "⚡ Status",
+              "storage_opt": "💾 Storage"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": true,
+                "field": "⚡ Status"
+              },
+              {
+                "desc": false,
+                "field": "🎯 Prioridade"
+              },
+              {
+                "desc": true,
+                "field": "⏳ Retenção"
+              }
+            ]
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "string",
+                "targetField": "⏳ Retenção"
+              }
+            ],
+            "fields": {}
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 100,
+      "panels": [],
+      "title": "⚙️ STATUS OPERACIONAL DOS JOBS",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista consolidada dos jobs habilitados e desabilitados em um único painel. A coluna Status pode ser usada como filtro interativo no cabeçalho da tabela para exibir apenas jobs habilitados ou apenas desabilitados. As colunas de prioridade e retenção foram removidas para concentrar a leitura apenas no nome do job, no status operacional atual e no total de ocorrências registradas na lista.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 420
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "green",
+                    "text": "✅ HABILITADO",
+                    "type": 1,
+                    "value": "Habilitado"
+                  },
+                  {
+                    "color": "red",
+                    "text": "⛔ DESABILITADO",
+                    "type": 1,
+                    "value": "Desabilitado"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 101,
+      "options": {
+        "cellHeight": "md",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Status"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "veeam_job_configuration",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "📋 LISTA DE JOBS POR STATUS OPERACIONAL",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "job_name",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "job_name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "job_name": "Job",
+              "status": "Status"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Ocorrências",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "job_name"
+              ],
+              "reducer": "count"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "Job"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Evolução temporal da quantidade total de jobs habilitados e desabilitados. O gráfico permite acompanhar alterações administrativas no ambiente, identificar mudanças de habilitação ao longo do tempo e comparar o comportamento das duas categorias na mesma janela temporal.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Habilitados"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Desabilitados"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 19
+      },
+      "id": 102,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_job_configuration{status=\"Habilitado\"})",
+          "legendFormat": "Habilitados",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_job_configuration{status=\"Desabilitado\"})",
+          "legendFormat": "Desabilitados",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "📈 EVOLUÇÃO COMPARATIVA DE JOBS HABILITADOS X DESABILITADOS",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "id": 110,
+      "panels": [],
+      "title": "🎯 DISTRIBUIÇÃO DE JOBS POR PRIORIDADE",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada de jobs classificados com prioridade alta. O painel destaca quais jobs pertencem ao grupo de maior criticidade operacional, exibindo o nome do job, seu status atual de habilitação e o total de ocorrências listadas.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 420
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "green",
+                    "text": "✅ HABILITADO",
+                    "type": 1,
+                    "value": "Habilitado"
+                  },
+                  {
+                    "color": "red",
+                    "text": "⛔ DESABILITADO",
+                    "type": 1,
+                    "value": "Desabilitado"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Prioridade"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 140
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "red",
+                    "text": "🔴 Alta",
+                    "type": 1,
+                    "value": "High"
+                  },
+                  {
+                    "color": "blue",
+                    "text": "🔵 Normal",
+                    "type": 1,
+                    "value": "Normal"
+                  },
+                  {
+                    "color": "orange",
+                    "text": "🟠 Média",
+                    "type": 1,
+                    "value": "Medium"
+                  },
+                  {
+                    "color": "purple",
+                    "text": "🟣 Baixa",
+                    "type": 1,
+                    "value": "Low"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 7,
+        "x": 0,
+        "y": 30
+      },
+      "id": 111,
+      "options": {
+        "cellHeight": "md",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Prioridade"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "veeam_job_configuration{priority=\"Alto\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "🔴 JOBS DE ALTA PRIORIDADE",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "job_name",
+                "status",
+                "priority"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "job_name": 0,
+              "priority": 2,
+              "status": 1
+            },
+            "renameByName": {
+              "job_name": "Job",
+              "priority": "Prioridade",
+              "status": "Status"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Ocorrências",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "job_name"
+              ],
+              "reducer": "count"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "Job"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada de jobs classificados com prioridade alta. O painel destaca quais jobs pertencem ao grupo de maior criticidade operacional, exibindo o nome do job, seu status atual de habilitação e o total de ocorrências listadas.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 420
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "green",
+                    "text": "✅ HABILITADO",
+                    "type": 1,
+                    "value": "Habilitado"
+                  },
+                  {
+                    "color": "red",
+                    "text": "⛔ DESABILITADO",
+                    "type": 1,
+                    "value": "Desabilitado"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Prioridade"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 140
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "red",
+                    "text": "🔴 Alta",
+                    "type": 1,
+                    "value": "High"
+                  },
+                  {
+                    "color": "blue",
+                    "text": "🔵 Normal",
+                    "type": 1,
+                    "value": "Normal"
+                  },
+                  {
+                    "color": "orange",
+                    "text": "🟠 Média",
+                    "type": 1,
+                    "value": "Medium"
+                  },
+                  {
+                    "color": "purple",
+                    "text": "🟣 Baixa",
+                    "type": 1,
+                    "value": "Low"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 7,
+        "x": 7,
+        "y": 30
+      },
+      "id": 145,
+      "options": {
+        "cellHeight": "md",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Status"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "veeam_job_configuration{priority=\"Normal\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "🔵 JOBS DE PRIORIDADE NORMAL",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "job_name",
+                "status",
+                "priority"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "job_name": 0,
+              "priority": 2,
+              "status": 1
+            },
+            "renameByName": {
+              "job_name": "Job",
+              "priority": "Prioridade",
+              "status": "Status"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Ocorrências",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "job_name"
+              ],
+              "reducer": "count"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "Job"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Comparação temporal entre a quantidade de jobs configurados como prioridade alta e prioridade normal. Este gráfico é útil para avaliar se o ambiente está concentrando mais cargas críticas ao longo do tempo ou se a distribuição operacional permanece equilibrada.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Alta prioridade"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Prioridade normal"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 14,
+        "y": 30
+      },
+      "id": 113,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_job_configuration{priority=\"Alto\"})",
+          "legendFormat": "Alta prioridade",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_job_configuration{priority=\"Normal\"})",
+          "legendFormat": "Prioridade normal",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "📈 EVOLUÇÃO COMPARATIVA DAS PRIORIDADES (ALTA X NORMAL)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 40
+      },
+      "id": 120,
+      "panels": [],
+      "title": "📅 POLÍTICAS DE RETENÇÃO DOS JOBS",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Matriz paginada no mesmo modelo do dashboard original, preservando a visualização em barras para a quantidade configurada de retenção por job. Exibe o nome do job, o tipo de política de retenção aplicada, a quantidade configurada, o status operacional do job e uma barra visual para rápida comparação entre diferentes valores.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "hideFrom": {
+              "viz": false
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 15
+              },
+              {
+                "color": "orange",
+                "value": 30
+              },
+              {
+                "color": "red",
+                "value": 60
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 350
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Política"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "blue",
+                    "text": "📅 DIAS",
+                    "type": 1,
+                    "value": "Days"
+                  },
+                  {
+                    "color": "purple",
+                    "text": "🔄 PONTOS",
+                    "type": 1,
+                    "value": "RestorePoints"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Quantidade"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Barra de Retenção"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 200
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 90
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "showUnfilled": true,
+                  "thresholds": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 15
+                    },
+                    {
+                      "color": "orange",
+                      "value": 30
+                    },
+                    {
+                      "color": "red",
+                      "value": 60
+                    }
+                  ],
+                  "type": "gauge"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": []
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "green",
+                    "text": "✅ ATIVO",
+                    "type": 1,
+                    "value": "Habilitado"
+                  },
+                  {
+                    "color": "red",
+                    "text": "❌ INATIVO",
+                    "type": 1,
+                    "value": "Desabilitado"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Tendência"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Days": {
+                        "color": "blue",
+                        "text": "📈"
+                      },
+                      "RestorePoints": {
+                        "color": "purple",
+                        "text": "🔄"
+                      }
+                    },
+                    "type": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 0,
+        "y": 41
+      },
+      "id": 121,
+      "options": {
+        "cellHeight": "md",
+        "enablePagination": true,
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Quantidade"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "veeam_job_configuration",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "🏷️ POLÍTICA DE RETENÇÃO DOS JOBS",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "job_name",
+                "retentionQty",
+                "retention_type",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "retentionQty": false
+            },
+            "includeByName": {},
+            "indexByName": {
+              "job_name": 0,
+              "retentionQty": 3,
+              "retention_type": 1,
+              "status": 2
+            },
+            "renameByName": {
+              "job_name": "Job",
+              "retentionQty": "Quantidade",
+              "retention_type": "Política",
+              "status": "Status"
+            }
+          }
+        },
+        {
+          "disabled": true,
+          "id": "calculateField",
+          "options": {
+            "alias": "Tendência",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "retention_type"
+              ],
+              "reducer": "last"
+            }
+          }
+        },
+        {
+          "disabled": true,
+          "id": "calculateField",
+          "options": {
+            "alias": "Barra de Retenção",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "retentionQty"
+              ],
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "Quantidade"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Evolução da adoção das políticas de retenção baseadas em dias e em pontos de restauração. A leitura comparativa mostra qual estratégia de retenção predomina no ambiente ao longo do tempo e se houve mudanças de padrão na configuração dos jobs.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Retenção por dias"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pontos de restauração"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 41
+      },
+      "id": 122,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_job_configuration{retention_type=\"Days\"})",
+          "legendFormat": "Retenção por dias",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_job_configuration{retention_type=\"RestorePoints\"})",
+          "legendFormat": "Pontos de restauração",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "📈 EVOLUÇÃO COMPARATIVA DAS POLÍTICAS DE RETENÇÃO (DIAS X PONTOS)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 55
+      },
+      "id": 130,
+      "panels": [],
+      "title": "🗂️ ANÁLISE DE GFS POR JOB",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada dos jobs que possuem política GFS configurada. Além do nome do job, o painel exibe o status operacional habilitado/desabilitado herdado da configuração do job e contabiliza as ocorrências listadas. Essa visão permite validar proteção avançada sem perder o contexto administrativo do job.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 420
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "green",
+                    "text": "✅ HABILITADO",
+                    "type": 1,
+                    "value": "Habilitado"
+                  },
+                  {
+                    "color": "red",
+                    "text": "⛔ DESABILITADO",
+                    "type": 1,
+                    "value": "Desabilitado"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 56
+      },
+      "id": 131,
+      "options": {
+        "cellHeight": "md",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Job"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "(veeam_performance_metrics{metric_type=\"has_gfs_policy\"} == 1) * on(job_name) group_left(status) veeam_job_configuration",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "✅ JOBS COM PROTEÇÃO GFS",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "job_name",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "job_name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "job_name": "Job",
+              "status": "Status"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Ocorrências",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "job_name"
+              ],
+              "reducer": "count"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "Job"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada dos jobs que possuem política GFS configurada. Além do nome do job, o painel exibe o status operacional habilitado/desabilitado herdado da configuração do job e contabiliza as ocorrências listadas. Essa visão permite validar proteção avançada sem perder o contexto administrativo do job.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 420
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "green",
+                    "text": "✅ HABILITADO",
+                    "type": 1,
+                    "value": "Habilitado"
+                  },
+                  {
+                    "color": "red",
+                    "text": "⛔ DESABILITADO",
+                    "type": 1,
+                    "value": "Desabilitado"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 56
+      },
+      "id": 144,
+      "options": {
+        "cellHeight": "md",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Job"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "(veeam_performance_metrics{metric_type=\"has_gfs_policy\"} == 0) * on(job_name) group_left(status) veeam_job_configuration",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "⚠️ JOBS SEM PROTEÇÃO GFS",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "job_name",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "job_name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "job_name": "Job",
+              "status": "Status"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Ocorrências",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "job_name"
+              ],
+              "reducer": "count"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "Job"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Evolução da adoção da configuração GFS no ambiente, comparando o número de jobs com GFS, sem GFS e o percentual de adoção total. Mantido no dashboard para preservar a visão histórica da maturidade da proteção avançada.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Com GFS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 20
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sem GFS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Adoção %"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 3
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 56
+      },
+      "id": 133,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_performance_metrics{metric_type=\"has_gfs_policy\"} == 1)",
+          "legendFormat": "Com GFS",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_performance_metrics{metric_type=\"has_gfs_policy\"} == 0)",
+          "legendFormat": "Sem GFS",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "editorMode": "code",
+          "expr": "(count(veeam_performance_metrics{metric_type=\"has_gfs_policy\"} == 1) / count(veeam_performance_metrics{metric_type=\"has_gfs_policy\"})) * 100",
+          "legendFormat": "Adoção %",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "📈 EVOLUÇÃO DA ADOÇÃO GFS (30 DIAS)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 66
+      },
+      "id": 140,
+      "panels": [],
+      "title": "⏰ CONTROLE DE JANELAS DE EXECUÇÃO",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada dos jobs com janela de execução configurada. O painel detalha cada job que já possui controle temporal definido, mostrando também o status administrativo do job e o total de ocorrências registradas na listagem.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 420
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "green",
+                    "text": "✅ HABILITADO",
+                    "type": 1,
+                    "value": "Habilitado"
+                  },
+                  {
+                    "color": "red",
+                    "text": "⛔ DESABILITADO",
+                    "type": 1,
+                    "value": "Desabilitado"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 67
+      },
+      "id": 141,
+      "options": {
+        "cellHeight": "md",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Job"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "(veeam_performance_metrics{metric_type=\"has_backup_window\"} == 1) * on(job_name) group_left(status) veeam_job_configuration",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "✅ JOBS COM JANELA DE EXECUÇÃO ATIVADA",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "job_name",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "job_name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "job_name": "Job",
+              "status": "Status"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Ocorrências",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "job_name"
+              ],
+              "reducer": "count"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "Job"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Lista paginada dos jobs que ainda não possuem janela de execução configurada. Mantém o nome do job, o status de habilitação e o total de ocorrências, apoiando a identificação de jobs que podem executar sem restrição de janela operacional.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 420
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "custom.filterable",
+                "value": true
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "color": "green",
+                    "text": "✅ HABILITADO",
+                    "type": 1,
+                    "value": "Habilitado"
+                  },
+                  {
+                    "color": "red",
+                    "text": "⛔ DESABILITADO",
+                    "type": 1,
+                    "value": "Desabilitado"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 67
+      },
+      "id": 142,
+      "options": {
+        "cellHeight": "md",
+        "enablePagination": true,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Job"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "(veeam_performance_metrics{metric_type=\"has_backup_window\"} == 0) * on(job_name) group_left(status) veeam_job_configuration",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "⚠️ JOBS COM JANELA DE EXECUÇÃO DESATIVADA",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "job_name",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "job_name": 0,
+              "status": 1
+            },
+            "renameByName": {
+              "job_name": "Job",
+              "status": "Status"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Ocorrências",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "job_name"
+              ],
+              "reducer": "count"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "desc": false,
+                "field": "Job"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-prod"
+      },
+      "description": "Comparação temporal entre jobs com janela de execução ativada e jobs sem janela definida. Este gráfico ajuda a acompanhar a evolução da governança operacional das agendas de backup e a medir se a conformidade de janelas está melhorando ao longo do tempo.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Com janela de execução"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sem janela de execução"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 67
+      },
+      "id": 143,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.3",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_performance_metrics{metric_type=\"has_backup_window\"} == 1)",
+          "legendFormat": "Com janela de execução",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "count(veeam_performance_metrics{metric_type=\"has_backup_window\"} == 0)",
+          "legendFormat": "Sem janela de execução",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "📈 EVOLUÇÃO COMPARATIVA DAS JANELAS DE EXECUÇÃO",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "30s",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "01 - Análise Geral de Configurações dos Jobs de Backup Veeam",
+  "uid": "adpfpcn",
+  "version": 3
+}
