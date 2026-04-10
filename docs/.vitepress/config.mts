@@ -12,7 +12,8 @@ export default defineConfig({
       { text: "CI/CD", link: "/cicd" },
       { text: "Rotas", link: "/routes" },
       { text: "Postman", link: "/postman" },
-      { text: "Execucao", link: "/running" }
+      { text: "Execucao", link: "/running" },
+      { text: "Agente IA (MCP)", link: "/ai-agent-mcp-veeam-falhas" }
     ],
     sidebar: [
       {
@@ -24,7 +25,8 @@ export default defineConfig({
           { text: "Fluxos", link: "/flows" },
           { text: "Rotas e metricas", link: "/routes" },
           { text: "Documentacao Postman", link: "/postman" },
-          { text: "Execucao", link: "/running" }
+          { text: "Execucao", link: "/running" },
+          { text: "Agente IA para falhas", link: "/ai-agent-mcp-veeam-falhas" }
         ]
       }
     ],
