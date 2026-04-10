@@ -52,3 +52,7 @@ src/
 - `scaleout-repositories.service.ts`: repassa chamadas REST para `GET /vbr/scaleoutRepositories` e preserva o payload original.
 - `jobs.exporter.ts`: atualiza e renderiza metricas Prometheus com `prom-client`.
 - `repositories.exporter.ts`: cria metricas de capacidade e uso a partir dos payloads brutos de repositórios e SOBR.
+
+## Guias Operacionais
+
+- [Dashboard Panorama Geral dos Jobs de Backup - Ajustes 01](/dashboard-panorama-jobs-ajustes-01)

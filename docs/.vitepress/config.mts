@@ -10,6 +10,7 @@ export default defineConfig({
       { text: "Inicio", link: "/" },
       { text: "Arquitetura", link: "/architecture" },
       { text: "CI/CD", link: "/cicd" },
+      { text: "Dashboard Jobs", link: "/dashboard-panorama-jobs-ajustes-01" },
       { text: "Rotas", link: "/routes" },
       { text: "Postman", link: "/postman" },
       { text: "Execucao", link: "/running" }
@@ -21,6 +22,7 @@ export default defineConfig({
           { text: "Visao geral", link: "/" },
           { text: "Arquitetura", link: "/architecture" },
           { text: "CI/CD e branches", link: "/cicd" },
+          { text: "Dashboard Jobs - Ajustes 01", link: "/dashboard-panorama-jobs-ajustes-01" },
           { text: "Fluxos", link: "/flows" },
           { text: "Rotas e metricas", link: "/routes" },
           { text: "Documentacao Postman", link: "/postman" },
