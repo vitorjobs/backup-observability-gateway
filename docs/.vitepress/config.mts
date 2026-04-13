@@ -9,6 +9,7 @@ export default defineConfig({
     nav: [
       { text: "Inicio", link: "/" },
       { text: "Arquitetura", link: "/architecture" },
+      { text: "Docker", link: "/docker" },
       { text: "CI/CD", link: "/cicd" },
       { text: "Dashboard Jobs", link: "/dashboard-panorama-jobs-ajustes-01" },
       { text: "Rotas", link: "/routes" },
@@ -22,6 +23,7 @@ export default defineConfig({
         items: [
           { text: "Visao geral", link: "/" },
           { text: "Arquitetura", link: "/architecture" },
+          { text: "Docker", link: "/docker" },
           { text: "CI/CD e branches", link: "/cicd" },
           { text: "Dashboard Jobs - Ajustes 01", link: "/dashboard-panorama-jobs-ajustes-01" },
           { text: "Fluxos", link: "/flows" },

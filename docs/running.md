@@ -42,7 +42,11 @@ Acessos padrao:
 - Prometheus: `http://localhost:19090`
 - Grafana: `http://localhost:13000`
 
-No Docker, a API usa `network_mode: host` para acessar o Veeam ONE pela mesma rota de rede do host. O Prometheus continua em rede Docker e raspa `host.docker.internal:9469`.
+No estado atual do `docker/docker-compose.yml`, os containers ativos da stack sao `prometheus` e `grafana`.
+
+A API continua sendo raspada fora do Compose por `host.docker.internal:9469`. O bloco do servico `api`, com `network_mode: host`, existe no arquivo, mas esta comentado neste momento.
+
+Para a visao completa da implementacao Docker, incluindo rede, volumes, bind mounts, provisioning e dashboard principal, veja [Docker](/docker).
 
 Os arquivos Docker ficam isolados em `docker/`:
 
