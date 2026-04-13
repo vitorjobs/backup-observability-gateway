@@ -38,13 +38,13 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build
 
 Acessos padrao:
 
-- API: `http://localhost:9469`
-- Prometheus: `http://localhost:19090`
-- Grafana: `http://localhost:13000`
+- API: `http://localhost:9470`
+- Prometheus: `http://localhost:29090`
+- Grafana: `http://localhost:23000`
 
-No estado atual do `docker/docker-compose.yml`, os containers ativos da stack sao `prometheus` e `grafana`.
+No estado atual do `docker/docker-compose.yml`, os containers ativos da stack sao `api`, `prometheus` e `grafana`.
 
-A API continua sendo raspada fora do Compose por `host.docker.internal:9469`. O bloco do servico `api`, com `network_mode: host`, existe no arquivo, mas esta comentado neste momento.
+A API sobe no Compose com `network_mode: host` para herdar a mesma rota de rede do host ate o Veeam ONE. O Prometheus continua raspando a API por `host.docker.internal:9470`.
 
 Para a visao completa da implementacao Docker, incluindo rede, volumes, bind mounts, provisioning e dashboard principal, veja [Docker](/docker).
 
@@ -63,9 +63,9 @@ Os arquivos Docker ficam isolados em `docker/`:
 Depois de subir a API, valide os novos endpoints da Entrega 2:
 
 ```bash
-curl http://localhost:9469/api/veeam-one/repositories
-curl http://localhost:9469/api/veeam-one/scaleout-repositories
-curl http://localhost:9469/metrics
+curl http://localhost:9470/api/veeam-one/repositories
+curl http://localhost:9470/api/veeam-one/scaleout-repositories
+curl http://localhost:9470/metrics
 ```
 
 ## Documentacao

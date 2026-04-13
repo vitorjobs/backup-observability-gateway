@@ -46,9 +46,9 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build
 
 ## Acessos
 
-- API: `http://localhost:9469`
-- Prometheus: `http://localhost:19090`
-- Grafana: `http://localhost:13000`
+- API: `http://localhost:9470`
+- Prometheus: `http://localhost:29090`
+- Grafana: `http://localhost:23000`
 
 ## Dashboards
 
@@ -60,7 +60,7 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build
 
 A API usa `network_mode: host` para acessar o Veeam ONE pela mesma rota do host.
 
-O Prometheus usa `host.docker.internal:9469` configurado em `docker/prometheus/prometheus.yml`.
+O Prometheus usa `host.docker.internal:9470` configurado em `docker/prometheus/prometheus.yml`.
 
 Se a porta da API mudar, ajuste `APP_PORT` no `docker/.env` e o target em `docker/prometheus/prometheus.yml`.
 

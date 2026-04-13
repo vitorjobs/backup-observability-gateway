@@ -8,7 +8,7 @@ Crie um environment no Postman com:
 
 | Variavel | Valor local |
 | --- | --- |
-| `baseUrl` | `http://localhost:9469` |
+| `baseUrl` | `http://localhost:9470` |
 
 As rotas abaixo nao exigem autenticacao no gateway. A autenticacao com o Veeam ONE acontece internamente no backend usando as variaveis do `.env`.
 

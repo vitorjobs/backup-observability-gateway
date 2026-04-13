@@ -91,11 +91,11 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build
 
 Acessos padrao:
 
-- API: `http://localhost:9469`
-- Prometheus: `http://localhost:19090`
-- Grafana: `http://localhost:13000`
+- API: `http://localhost:9470`
+- Prometheus: `http://localhost:29090`
+- Grafana: `http://localhost:23000`
 
-A stack Docker fica isolada em `docker/`. A API usa `network_mode: host` no Compose para alcançar ambientes Veeam ONE que sao acessiveis pelo host, mas nao pela rede bridge padrao do Docker. O Prometheus raspa a API por `host.docker.internal:9469`, configurado em `docker/prometheus/prometheus.yml`.
+A stack Docker fica isolada em `docker/`. A API usa `network_mode: host` no Compose para alcançar ambientes Veeam ONE que sao acessiveis pelo host, mas nao pela rede bridge padrao do Docker. O Prometheus raspa a API por `host.docker.internal:9470`, configurado em `docker/prometheus/prometheus.yml`.
 
 As configuracoes do Prometheus e do Grafana ficam em arquivos versionaveis:
 

@@ -16,12 +16,12 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV APP_HOST=0.0.0.0
-ENV APP_PORT=9469
+ENV APP_PORT=9470
 
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
-EXPOSE 9469
+EXPOSE 9470
 
 CMD ["node", "dist/server.js"]
