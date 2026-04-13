@@ -44,7 +44,7 @@ Acessos padrao:
 
 No estado atual do `docker/docker-compose.yml`, os containers ativos da stack sao `api`, `prometheus` e `grafana`.
 
-A API sobe no Compose com `network_mode: host` para herdar a mesma rota de rede do host ate o Veeam ONE. O Prometheus continua raspando a API por `host.docker.internal:9470`.
+A API sobe no Compose escutando `9469` no container e publicada como `9470` no host. O Prometheus raspa a API pela rede interna do Compose em `api:9469`.
 
 Para a visao completa da implementacao Docker, incluindo rede, volumes, bind mounts, provisioning e dashboard principal, veja [Docker](/docker).
 

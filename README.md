@@ -95,7 +95,7 @@ Acessos padrao:
 - Prometheus: `http://localhost:29090`
 - Grafana: `http://localhost:23000`
 
-A stack Docker fica isolada em `docker/`. A API usa `network_mode: host` no Compose para alcançar ambientes Veeam ONE que sao acessiveis pelo host, mas nao pela rede bridge padrao do Docker. O Prometheus raspa a API por `host.docker.internal:9470`, configurado em `docker/prometheus/prometheus.yml`.
+A stack Docker fica isolada em `docker/`. A API escuta na porta interna `9469`, publicada no host como `9470`, e o Prometheus raspa a API pela rede interna do Compose em `api:9469`, configurado em `docker/prometheus/prometheus.yml`.
 
 As configuracoes do Prometheus e do Grafana ficam em arquivos versionaveis:
 

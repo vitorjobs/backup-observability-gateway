@@ -13,8 +13,11 @@ services:
     environment:
       NODE_ENV: production
       APP_HOST: 0.0.0.0
-      APP_PORT: ${APP_PORT:-9470}
-    network_mode: host
+      APP_PORT: ${APP_PORT:-9469}
+    ports:
+      - "${API_HOST_PORT:-9470}:9469"
+    networks:
+      - observability
 
   prometheus:
     image: ${PROMETHEUS_IMAGE:-prom/prometheus:latest}
@@ -31,8 +34,6 @@ services:
       - "--web.console.templates=/usr/share/prometheus/consoles"
     ports:
       - "${PROMETHEUS_HOST_PORT:-29090}:9090"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus

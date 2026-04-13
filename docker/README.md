@@ -58,11 +58,11 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build
 
 ## Rede
 
-A API usa `network_mode: host` para acessar o Veeam ONE pela mesma rota do host.
+A API participa da rede `observability` do Compose e publica `9470` no host mapeando para `9469` no container.
 
-O Prometheus usa `host.docker.internal:9470` configurado em `docker/prometheus/prometheus.yml`.
+O Prometheus usa `api:9469` configurado em `docker/prometheus/prometheus.yml`.
 
-Se a porta da API mudar, ajuste `APP_PORT` no `docker/.env` e o target em `docker/prometheus/prometheus.yml`.
+Se a porta interna da API mudar, ajuste `APP_PORT` no `docker/.env`, o mapeamento em `docker/docker-compose.yml` e o target em `docker/prometheus/prometheus.yml`.
 
 ## Parar
 

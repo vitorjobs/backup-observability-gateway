@@ -9,7 +9,7 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets:
-          - host.docker.internal:9470
+          - api:9469
         labels:
           app: app-v2
           environment: production-v2

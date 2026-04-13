@@ -49,7 +49,7 @@ set -a
 . docker/.env
 set +a
 
-API_PORT="\${APP_PORT:-9470}"
+API_PORT="\${API_HOST_PORT:-9470}"
 
 mkdir -p logs
 
