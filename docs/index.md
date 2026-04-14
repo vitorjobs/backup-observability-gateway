@@ -74,4 +74,4 @@ docs/
 ## Guias Operacionais
 
 - [Docker](/docker)
-- [Dashboard Panorama Geral dos Jobs de Backup - Ajustes 01](/dashboard-panorama-jobs-ajustes-01)
+- [Dashboard Panorama Geral - Execucao dos Jobs de Backup](/dashboard-panorama-jobs-ajustes-01)
