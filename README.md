@@ -138,9 +138,9 @@ As configuracoes do Prometheus e do Grafana ficam em arquivos versionaveis:
 - `docker/prometheus/prometheus.yml`
 - `docker/grafana/provisioning/datasources/prometheus.yml`
 - `docker/grafana/provisioning/dashboards/dashboards.yml`
-- `docker/grafana/dashboards/veeam-one-jobs-sre.json`
-- `docker/grafana/dashboards/veeam-one-jobs-detail.json`
-- `docker/grafana/dashboards/veeam-one-repositories-capacity.json`
+- `docker/grafana/dashboards/Panorama Geral dos Jobs de Backup.json`
+- `docker/grafana/dashboards/veeam-one-repositories-panorama-executivo-consolidado.json`
+- `docker/grafana/SRE/`
 - `docker/Dockerfile.vitepress`
 
 ## Metricas

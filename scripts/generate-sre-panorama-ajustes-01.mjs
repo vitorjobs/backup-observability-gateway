@@ -9,7 +9,7 @@ const modelDashboardsDir = path.join(sreDir, "dashboards-modelo-consulta");
 const finalDashboardPath = path.join(sreDir, "Panorama Geral dos Jobs de Backup - Ajustes 01.json");
 const provisionedDashboardPath = path.join(
   sourceDashboardsDir,
-  "Panorama Geral dos Jobs de Backup  - Ajustes 01-1775850127781.json"
+  "Panorama Geral dos Jobs de Backup.json"
 );
 
 const DS = {

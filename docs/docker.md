@@ -9,7 +9,8 @@ Documentacao oficial da stack Docker do projeto, consolidando a estrutura da pas
 - Prometheus publicado no host como `19090`
 - Grafana publicado no host como `13000`
 - VitePress publicado no host como `4173`
-- Dashboard principal provisionado: `Panorama Geral dos Jobs de Backup - Ajustes 01`
+- Dashboard principal provisionado: `Panorama Geral - Execução dos Jobs de Backup`
+- Dashboard relacionado provisionado: `Panorama Geral - Repositórios de Backup`
 - Volumes persistentes: `prometheus-data` e `grafana-data`
 - Rede Docker dedicada: `veeam-one-observability` para `api`, `Prometheus`, `Grafana` e `VitePress`
 
@@ -27,9 +28,8 @@ docker/
     provisioning/
       datasources/prometheus.yml
       dashboards/dashboards.yml
-    dashboards/veeam-one-jobs-sre.json
-    dashboards/veeam-one-jobs-detail.json
-    dashboards/veeam-one-repositories-capacity.json
+    dashboards/Panorama Geral dos Jobs de Backup.json
+    dashboards/veeam-one-repositories-panorama-executivo-consolidado.json
 ```
 
 ## Operacao Local

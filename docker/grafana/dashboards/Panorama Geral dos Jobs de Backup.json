@@ -27,34 +27,10 @@
       "keepTime": true,
       "tags": [],
       "targetBlank": false,
-      "title": "Visão Integrada",
-      "tooltip": "Abrir a visão integrada de jobs e repositórios.",
+      "title": "Panorama de Repositórios",
+      "tooltip": "Abrir o panorama executivo de repositórios e capacidade.",
       "type": "link",
-      "url": "/d/veeam-one-jobs-sre"
-    },
-    {
-      "asDropdown": false,
-      "icon": "dashboard",
-      "includeVars": true,
-      "keepTime": true,
-      "tags": [],
-      "targetBlank": false,
-      "title": "Detalhamento de Jobs",
-      "tooltip": "Abrir o drill-down operacional de jobs.",
-      "type": "link",
-      "url": "/d/veeam-one-jobs-detail"
-    },
-    {
-      "asDropdown": false,
-      "icon": "dashboard",
-      "includeVars": true,
-      "keepTime": true,
-      "tags": [],
-      "targetBlank": false,
-      "title": "Panorama Base",
-      "tooltip": "Abrir o panorama base usado como referência.",
-      "type": "link",
-      "url": "/d/veeam-one-jobs-panorama-geral"
+      "url": "/d/veeam-repositories-panorama-executivo"
     }
   ],
   "liveNow": false,
@@ -6391,7 +6367,11 @@
     "jobs",
     "panorama",
     "sre",
-    "ajustes-01"
+    "operacional",
+    "executivo",
+    "backup",
+    "principal",
+    "linked"
   ],
   "templating": {
     "list": [
@@ -6500,8 +6480,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Panorama Geral dos Jobs de Backup - Ajustes 01",
+  "title": "Panorama Geral - Execução dos Jobs de Backup",
   "uid": "advmjkc",
-  "version": 20,
+  "version": 21,
   "weekStart": ""
 }

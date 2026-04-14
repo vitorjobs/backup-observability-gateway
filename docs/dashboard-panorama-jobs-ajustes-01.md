@@ -1,10 +1,10 @@
-# Dashboard Panorama Geral dos Jobs de Backup - Ajustes 01
+# Dashboard Panorama Geral - Execucao dos Jobs de Backup
 
 ## Escopo
 
-Este documento descreve o dashboard:
+Este documento descreve o dashboard principal provisionado:
 
-- `docker/grafana/dashboards/Panorama Geral dos Jobs de Backup  - Ajustes 01-1775850127781.json`
+- `docker/grafana/dashboards/Panorama Geral dos Jobs de Backup.json`
 
 Objetivo operacional:
 
