@@ -1,22 +1,24 @@
 # Docker
 
-Documentacao oficial da stack Docker do projeto, consolidando a estrutura da pasta `docker/`, a operacao local e remota, a comunicacao entre containers e os componentes de observabilidade provisionados.
+Documentacao oficial da stack Docker do projeto, consolidando a estrutura da pasta `docker/`, a operacao local e remota, a comunicacao entre containers e os componentes de observabilidade provisionados, incluindo a publicacao da documentacao VitePress.
 
 ## Visao Geral
 
-- Containers ativos na stack local e remota: `veeam-one-api`, `veeam-one-prometheus` e `veeam-one-grafana`
+- Containers ativos na stack local e remota: `veeam-one-api`, `veeam-one-prometheus`, `veeam-one-grafana` e `veeam-one-vitepress`
 - Runtime da API: containerizado no Compose, escutando `9469` e publicado no host como `9469`
 - Prometheus publicado no host como `19090`
 - Grafana publicado no host como `13000`
+- VitePress publicado no host como `4173`
 - Dashboard principal provisionado: `Panorama Geral dos Jobs de Backup - Ajustes 01`
 - Volumes persistentes: `prometheus-data` e `grafana-data`
-- Rede Docker dedicada: `veeam-one-observability` para `api`, `Prometheus` e `Grafana`
+- Rede Docker dedicada: `veeam-one-observability` para `api`, `Prometheus`, `Grafana` e `VitePress`
 
 ## Estrutura
 
 ```text
 docker/
   Dockerfile
+  Dockerfile.vitepress
   docker-compose.yml
   .env.example
   prometheus/
@@ -33,7 +35,7 @@ docker/
 ## Operacao Local
 
 - Local: `docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build`
-- Local URLs: `http://localhost:9469`, `http://localhost:19090`, `http://localhost:13000`
+- Local URLs: `http://localhost:9469`, `http://localhost:19090`, `http://localhost:13000`, `http://localhost:4173`
 
 Antes de subir:
 
@@ -57,7 +59,7 @@ O arquivo `docker/.env` define:
 
 - Remoto: `bash deploy/deploy_docker.sh`
 - Remoto default host: `10.166.64.12`
-- Remoto URLs padrao: `http://10.166.64.12:9469`, `http://10.166.64.12:19090`, `http://10.166.64.12:13000`
+- Remoto URLs padrao: `http://10.166.64.12:9469`, `http://10.166.64.12:19090`, `http://10.166.64.12:13000`, `http://10.166.64.12:4173`
 - Destroy remoto: `bash deploy/destroy_docker.sh`
 
 Defaults dos scripts:
@@ -67,7 +69,7 @@ Defaults dos scripts:
 - `REMOTE_DIR=/var/www/appv2`
 - `SSH_KEY=$HOME/.ssh/id_rsa`
 
-O `deploy/deploy_docker.sh` faz rebuild completo da stack remota e valida API, Prometheus, Grafana e o acesso ao Veeam ONE.
+O `deploy/deploy_docker.sh` faz rebuild completo da stack remota e valida API, Prometheus, Grafana, VitePress e o acesso ao Veeam ONE.
 
 O `deploy/destroy_docker.sh` remove a stack remota, incluindo containers, volumes, rede e a imagem local da API.
 
@@ -83,8 +85,9 @@ Arquivo-fonte editavel versionado em `docs/public/docker/docker-architecture.exc
 - A API publica `9469` no host e responde internamente na mesma porta.
 - O Prometheus raspa metricas da API em `api:9469`, usando `docker/prometheus/prometheus.yml`.
 - O Grafana consulta o Prometheus em `http://prometheus:9090`, usando o provisioning versionado.
+- O VitePress e buildado com `npm run docs:build` e publicado com `npm run docs:preview` na porta `4173`.
 - A API sai do container para o Veeam ONE usando `VEEAM_BASE_URL` ou `VEEAM_ONE_BASE_URL` do `.env` raiz.
-- Os conflitos de porta ficam concentrados em `API_HOST_PORT`, `PROMETHEUS_HOST_PORT` e `GRAFANA_HOST_PORT` dentro de `docker/.env`.
+- Os conflitos de porta ficam concentrados em `API_HOST_PORT`, `PROMETHEUS_HOST_PORT`, `GRAFANA_HOST_PORT` e `VITEPRESS_HOST_PORT` dentro de `docker/.env`.
 
 ## Dashboards
 

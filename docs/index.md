@@ -40,6 +40,7 @@ src/
     repositories.exporter.ts
 docker/
   Dockerfile
+  Dockerfile.vitepress
   docker-compose.yml
   .env.example
   prometheus/

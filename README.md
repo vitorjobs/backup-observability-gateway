@@ -96,6 +96,7 @@ Acessos locais:
 - API: `http://localhost:9469`
 - Prometheus: `http://localhost:19090`
 - Grafana: `http://localhost:13000`
+- VitePress: `http://localhost:4173`
 
 A stack Docker fica isolada em `docker/`. A API escuta na porta interna fixa `9469` e publicada no host pela porta `API_HOST_PORT` definida em `docker/.env` (`9469` nesta branch). O Prometheus raspa a API pela rede interna do Compose em `api:9469`, o Grafana consulta o Prometheus em `http://prometheus:9090`, e a API sai do container para o Veeam ONE usando `VEEAM_BASE_URL` ou `VEEAM_ONE_BASE_URL` definidos no `.env` raiz.
 
@@ -104,6 +105,7 @@ Containers ativos na stack:
 - `veeam-one-api`
 - `veeam-one-prometheus`
 - `veeam-one-grafana`
+- `veeam-one-vitepress`
 
 ## Deploy Remoto
 
@@ -123,6 +125,7 @@ Acessos remotos padrao do script:
 - API: `http://10.166.64.12:9469`
 - Prometheus: `http://10.166.64.12:19090`
 - Grafana: `http://10.166.64.12:13000`
+- VitePress: `http://10.166.64.12:4173`
 
 Para destruir a stack remota:
 
@@ -138,6 +141,7 @@ As configuracoes do Prometheus e do Grafana ficam em arquivos versionaveis:
 - `docker/grafana/dashboards/veeam-one-jobs-sre.json`
 - `docker/grafana/dashboards/veeam-one-jobs-detail.json`
 - `docker/grafana/dashboards/veeam-one-repositories-capacity.json`
+- `docker/Dockerfile.vitepress`
 
 ## Metricas
 
