@@ -77,8 +77,6 @@ API_PORT="\${API_HOST_PORT:-9469}"
 PROMETHEUS_PORT="\${PROMETHEUS_HOST_PORT:-19090}"
 GRAFANA_PORT="\${GRAFANA_HOST_PORT:-13000}"
 VITEPRESS_PORT="\${VITEPRESS_HOST_PORT:-4173}"
-PROMETHEUS_VOLUME="\${PROMETHEUS_VOLUME_NAME:-veeam-one-monitoring-prometheus-data}"
-GRAFANA_VOLUME="\${GRAFANA_VOLUME_NAME:-veeam-one-monitoring-grafana-data}"
 VEEAM_BASE_URL="\$(grep -E '^(VEEAM_BASE_URL|VEEAM_ONE_BASE_URL)=' .env | head -n1 | cut -d= -f2-)"
 
 LEGACY_STACK_NAME="backup-observability-gateway-v2"
@@ -86,8 +84,6 @@ LEGACY_NETWORK_NAME="backup-observability-gateway-v2-network"
 LEGACY_API_CONTAINER="v2-backup-observability-gateway-api"
 LEGACY_PROMETHEUS_CONTAINER="v2-backup-observability-gateway-prometheus"
 LEGACY_GRAFANA_CONTAINER="v2-backup-observability-gateway-grafana"
-LEGACY_PROMETHEUS_VOLUME="v2-backup-observability-gateway-prometheus-data"
-LEGACY_GRAFANA_VOLUME="v2-backup-observability-gateway-grafana-data"
 
 remove_container_if_exists() {
   local container_name="\$1"
@@ -124,14 +120,6 @@ remove_containers_by_published_port() {
   fi
 }
 
-remove_volume_if_exists() {
-  local volume_name="\$1"
-  if docker volume inspect "\$volume_name" >/dev/null 2>&1; then
-    echo "Removendo volume \$volume_name ..."
-    docker volume rm -f "\$volume_name" >/dev/null
-  fi
-}
-
 remove_network_if_exists() {
   local network_name="\$1"
   if docker network inspect "\$network_name" >/dev/null 2>&1; then
@@ -156,10 +144,10 @@ assert_port_free() {
 docker compose --env-file docker/.env -f docker/docker-compose.yml config >/dev/null
 
 echo "Derrubando a stack atual (\$STACK_NAME) ..."
-docker compose --env-file docker/.env -f docker/docker-compose.yml down --remove-orphans --volumes || true
+docker compose --env-file docker/.env -f docker/docker-compose.yml down --remove-orphans || true
 
 echo "Derrubando a stack legada (\$LEGACY_STACK_NAME), se existir ..."
-docker compose -p "\$LEGACY_STACK_NAME" --env-file docker/.env -f docker/docker-compose.yml down --remove-orphans --volumes || true
+docker compose -p "\$LEGACY_STACK_NAME" --env-file docker/.env -f docker/docker-compose.yml down --remove-orphans || true
 
 remove_containers_by_project_label "\$STACK_NAME"
 remove_containers_by_project_label "\$LEGACY_STACK_NAME"
@@ -176,11 +164,6 @@ remove_containers_by_published_port "\$API_PORT" "API"
 remove_containers_by_published_port "\$PROMETHEUS_PORT" "Prometheus"
 remove_containers_by_published_port "\$GRAFANA_PORT" "Grafana"
 remove_containers_by_published_port "\$VITEPRESS_PORT" "VitePress"
-
-remove_volume_if_exists "\$PROMETHEUS_VOLUME"
-remove_volume_if_exists "\$GRAFANA_VOLUME"
-remove_volume_if_exists "\$LEGACY_PROMETHEUS_VOLUME"
-remove_volume_if_exists "\$LEGACY_GRAFANA_VOLUME"
 
 remove_network_if_exists "\$NETWORK_NAME"
 remove_network_if_exists "\$LEGACY_NETWORK_NAME"
