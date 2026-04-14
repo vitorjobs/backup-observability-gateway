@@ -62,6 +62,18 @@ services:
     networks:
       - observability
 
+  vitepress:
+    image: ${VITEPRESS_IMAGE:-backup-observability-gateway-vitepress:latest}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.vitepress
+    container_name: ${VITEPRESS_CONTAINER_NAME:-veeam-one-vitepress}
+    restart: ${VITEPRESS_RESTART_POLICY:-unless-stopped}
+    ports:
+      - "${VITEPRESS_HOST_PORT:-4173}:4173"
+    networks:
+      - observability
+
 networks:
   observability:
     name: ${OBSERVABILITY_NETWORK_NAME:-veeam-one-observability}

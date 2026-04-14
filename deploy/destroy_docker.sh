@@ -22,14 +22,17 @@ fi
 STACK_NAME="\${OBSERVABILITY_STACK_NAME:-veeam-one-monitoring}"
 NETWORK_NAME="\${OBSERVABILITY_NETWORK_NAME:-veeam-one-observability}"
 API_IMAGE="\${API_IMAGE:-backup-observability-gateway-v2:latest}"
+VITEPRESS_IMAGE="\${VITEPRESS_IMAGE:-backup-observability-gateway-vitepress:latest}"
 API_PORT="\${API_HOST_PORT:-9469}"
 PROMETHEUS_PORT="\${PROMETHEUS_HOST_PORT:-19090}"
 GRAFANA_PORT="\${GRAFANA_HOST_PORT:-13000}"
+VITEPRESS_PORT="\${VITEPRESS_HOST_PORT:-4173}"
 
 CONTAINERS=(
   "\${API_CONTAINER_NAME:-veeam-one-api}"
   "\${PROMETHEUS_CONTAINER_NAME:-veeam-one-prometheus}"
   "\${GRAFANA_CONTAINER_NAME:-veeam-one-grafana}"
+  "\${VITEPRESS_CONTAINER_NAME:-veeam-one-vitepress}"
   "v2-backup-observability-gateway-api"
   "v2-backup-observability-gateway-prometheus"
   "v2-backup-observability-gateway-grafana"
@@ -57,7 +60,7 @@ for container_name in "\${CONTAINERS[@]}"; do
   docker rm -f "\$container_name" >/dev/null 2>&1 || true
 done
 
-for published_port in "\$API_PORT" "\$PROMETHEUS_PORT" "\$GRAFANA_PORT"; do
+for published_port in "\$API_PORT" "\$PROMETHEUS_PORT" "\$GRAFANA_PORT" "\$VITEPRESS_PORT"; do
   for container_id in \$(docker ps -aq --filter "publish=\$published_port"); do
     docker rm -f "\$container_id" >/dev/null 2>&1 || true
   done
@@ -72,9 +75,10 @@ for network_name in "\${NETWORKS[@]}"; do
 done
 
 docker image rm -f "\$API_IMAGE" >/dev/null 2>&1 || true
+docker image rm -f "\$VITEPRESS_IMAGE" >/dev/null 2>&1 || true
 
 echo
 echo "Infraestrutura Docker removida com sucesso em $REMOTE_HOST."
-echo "PORTAS_LIBERADAS=\$API_PORT,\$PROMETHEUS_PORT,\$GRAFANA_PORT"
+echo "PORTAS_LIBERADAS=\$API_PORT,\$PROMETHEUS_PORT,\$GRAFANA_PORT,\$VITEPRESS_PORT"
 echo "STACK_REMOVIDA=\$STACK_NAME"
 EOF

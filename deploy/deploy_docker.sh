@@ -72,9 +72,11 @@ NETWORK_NAME="\${OBSERVABILITY_NETWORK_NAME:-veeam-one-observability}"
 API_CONTAINER="\${API_CONTAINER_NAME:-veeam-one-api}"
 PROMETHEUS_CONTAINER="\${PROMETHEUS_CONTAINER_NAME:-veeam-one-prometheus}"
 GRAFANA_CONTAINER="\${GRAFANA_CONTAINER_NAME:-veeam-one-grafana}"
+VITEPRESS_CONTAINER="\${VITEPRESS_CONTAINER_NAME:-veeam-one-vitepress}"
 API_PORT="\${API_HOST_PORT:-9469}"
 PROMETHEUS_PORT="\${PROMETHEUS_HOST_PORT:-19090}"
 GRAFANA_PORT="\${GRAFANA_HOST_PORT:-13000}"
+VITEPRESS_PORT="\${VITEPRESS_HOST_PORT:-4173}"
 PROMETHEUS_VOLUME="\${PROMETHEUS_VOLUME_NAME:-veeam-one-monitoring-prometheus-data}"
 GRAFANA_VOLUME="\${GRAFANA_VOLUME_NAME:-veeam-one-monitoring-grafana-data}"
 VEEAM_BASE_URL="\$(grep -E '^(VEEAM_BASE_URL|VEEAM_ONE_BASE_URL)=' .env | head -n1 | cut -d= -f2-)"
@@ -165,6 +167,7 @@ remove_containers_by_project_label "\$LEGACY_STACK_NAME"
 remove_container_if_exists "\$API_CONTAINER"
 remove_container_if_exists "\$PROMETHEUS_CONTAINER"
 remove_container_if_exists "\$GRAFANA_CONTAINER"
+remove_container_if_exists "\$VITEPRESS_CONTAINER"
 remove_container_if_exists "\$LEGACY_API_CONTAINER"
 remove_container_if_exists "\$LEGACY_PROMETHEUS_CONTAINER"
 remove_container_if_exists "\$LEGACY_GRAFANA_CONTAINER"
@@ -172,6 +175,7 @@ remove_container_if_exists "\$LEGACY_GRAFANA_CONTAINER"
 remove_containers_by_published_port "\$API_PORT" "API"
 remove_containers_by_published_port "\$PROMETHEUS_PORT" "Prometheus"
 remove_containers_by_published_port "\$GRAFANA_PORT" "Grafana"
+remove_containers_by_published_port "\$VITEPRESS_PORT" "VitePress"
 
 remove_volume_if_exists "\$PROMETHEUS_VOLUME"
 remove_volume_if_exists "\$GRAFANA_VOLUME"
@@ -184,6 +188,7 @@ remove_network_if_exists "\$LEGACY_NETWORK_NAME"
 assert_port_free "\$API_PORT" "API"
 assert_port_free "\$PROMETHEUS_PORT" "Prometheus"
 assert_port_free "\$GRAFANA_PORT" "Grafana"
+assert_port_free "\$VITEPRESS_PORT" "VitePress"
 
 docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build --force-recreate --remove-orphans
 docker compose --env-file docker/.env -f docker/docker-compose.yml ps
@@ -249,6 +254,21 @@ if command -v curl >/dev/null 2>&1; then
     echo "O Grafana nao respondeu em http://127.0.0.1:\$GRAFANA_PORT/api/health apos o deploy."
     exit 1
   fi
+
+  echo "Validando VitePress em http://127.0.0.1:\$VITEPRESS_PORT/ ..."
+  VITEPRESS_OK=false
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    if curl --fail --silent --show-error "http://127.0.0.1:\$VITEPRESS_PORT/" >/dev/null; then
+      VITEPRESS_OK=true
+      break
+    fi
+    sleep 3
+  done
+
+  if [ "\$VITEPRESS_OK" != "true" ]; then
+    echo "O VitePress nao respondeu em http://127.0.0.1:\$VITEPRESS_PORT/ apos o deploy."
+    exit 1
+  fi
 fi
 
 echo
@@ -256,5 +276,6 @@ echo "Deploy Docker da v2 finalizado com sucesso."
 echo "API_URL=http://$REMOTE_HOST:\$API_PORT"
 echo "PROMETHEUS_URL=http://$REMOTE_HOST:\$PROMETHEUS_PORT"
 echo "GRAFANA_URL=http://$REMOTE_HOST:\$GRAFANA_PORT"
+echo "VITEPRESS_URL=http://$REMOTE_HOST:\$VITEPRESS_PORT"
 echo "VEEAM_ONE_BASE_URL=\$VEEAM_BASE_URL"
 EOF

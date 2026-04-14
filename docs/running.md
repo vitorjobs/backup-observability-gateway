@@ -44,10 +44,11 @@ Acessos locais:
 - API: `http://localhost:9469`
 - Prometheus: `http://localhost:19090`
 - Grafana: `http://localhost:13000`
+- VitePress: `http://localhost:4173`
 
-No estado atual do `docker/docker-compose.yml`, os containers ativos da stack sao `veeam-one-api`, `veeam-one-prometheus` e `veeam-one-grafana`.
+No estado atual do `docker/docker-compose.yml`, os containers ativos da stack sao `veeam-one-api`, `veeam-one-prometheus`, `veeam-one-grafana` e `veeam-one-vitepress`.
 
-A API sobe no Compose escutando `9469` no container e publicada no host pela porta `API_HOST_PORT`, hoje `9469`. O Prometheus raspa a API pela rede interna do Compose em `api:9469`, o Grafana acessa `http://prometheus:9090` dentro da rede do Compose e a API acessa o Veeam ONE pelo `VEEAM_BASE_URL` ou `VEEAM_ONE_BASE_URL` configurado no `.env` raiz.
+A API sobe no Compose escutando `9469` no container e publicada no host pela porta `API_HOST_PORT`, hoje `9469`. O Prometheus raspa a API pela rede interna do Compose em `api:9469`, o Grafana acessa `http://prometheus:9090` dentro da rede do Compose, o VitePress publica a documentacao em `4173` e a API acessa o Veeam ONE pelo `VEEAM_BASE_URL` ou `VEEAM_ONE_BASE_URL` configurado no `.env` raiz.
 
 Para a visao completa da implementacao Docker, incluindo rede, volumes, bind mounts, provisioning e dashboard principal, veja [Docker](/docker).
 
@@ -56,6 +57,7 @@ Os arquivos Docker ficam isolados em `docker/`:
 - `docker/Dockerfile`
 - `docker/docker-compose.yml`
 - `docker/.env.example`
+- `docker/Dockerfile.vitepress`
 - `docker/prometheus/prometheus.yml`
 - `docker/grafana/provisioning/datasources/prometheus.yml`
 - `docker/grafana/provisioning/dashboards/dashboards.yml`
@@ -90,6 +92,7 @@ Acessos remotos padrao:
 - API: `http://10.166.64.12:9469`
 - Prometheus: `http://10.166.64.12:19090`
 - Grafana: `http://10.166.64.12:13000`
+- VitePress: `http://10.166.64.12:4173`
 
 Para destruir a stack remota:
 
