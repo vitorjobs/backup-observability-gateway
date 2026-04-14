@@ -1,4 +1,4 @@
-name: ${OBSERVABILITY_STACK_NAME:-backup-observability-gateway-v2}
+name: ${OBSERVABILITY_STACK_NAME:-veeam-one-monitoring}
 
 services:
   api:
@@ -6,23 +6,23 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    container_name: ${API_CONTAINER_NAME:-v2-backup-observability-gateway-api}
+    container_name: ${API_CONTAINER_NAME:-veeam-one-api}
     restart: ${API_RESTART_POLICY:-unless-stopped}
     env_file:
       - ../.env
     environment:
       NODE_ENV: production
       APP_HOST: 0.0.0.0
-      APP_PORT: ${APP_PORT:-9469}
+      APP_PORT: 9469
     ports:
-      - "${API_HOST_PORT:-9470}:9469"
+      - "${API_HOST_PORT:-9469}:9469"
     networks:
       - observability
 
   prometheus:
     image: ${PROMETHEUS_IMAGE:-prom/prometheus:latest}
     pull_policy: always
-    container_name: ${PROMETHEUS_CONTAINER_NAME:-v2-backup-observability-gateway-prometheus}
+    container_name: ${PROMETHEUS_CONTAINER_NAME:-veeam-one-prometheus}
     restart: ${PROMETHEUS_RESTART_POLICY:-unless-stopped}
     depends_on:
       - api
@@ -33,7 +33,7 @@ services:
       - "--web.console.libraries=/usr/share/prometheus/console_libraries"
       - "--web.console.templates=/usr/share/prometheus/consoles"
     ports:
-      - "${PROMETHEUS_HOST_PORT:-29090}:9090"
+      - "${PROMETHEUS_HOST_PORT:-19090}:9090"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
@@ -43,7 +43,7 @@ services:
   grafana:
     image: ${GRAFANA_IMAGE:-grafana/grafana:latest}
     pull_policy: always
-    container_name: ${GRAFANA_CONTAINER_NAME:-v2-backup-observability-gateway-grafana}
+    container_name: ${GRAFANA_CONTAINER_NAME:-veeam-one-grafana}
     restart: ${GRAFANA_RESTART_POLICY:-unless-stopped}
     depends_on:
       - prometheus
@@ -53,7 +53,7 @@ services:
       GF_USERS_ALLOW_SIGN_UP: "false"
       GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/dashboards/Panorama Geral dos Jobs de Backup  - Ajustes 01-1775850127781.json
     ports:
-      - "${GRAFANA_HOST_PORT:-23000}:3000"
+      - "${GRAFANA_HOST_PORT:-13000}:3000"
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
@@ -64,10 +64,10 @@ services:
 
 networks:
   observability:
-    name: ${OBSERVABILITY_NETWORK_NAME:-backup-observability-gateway-v2-network}
+    name: ${OBSERVABILITY_NETWORK_NAME:-veeam-one-observability}
 
 volumes:
   prometheus-data:
-    name: ${PROMETHEUS_VOLUME_NAME:-v2-backup-observability-gateway-prometheus-data}
+    name: ${PROMETHEUS_VOLUME_NAME:-veeam-one-monitoring-prometheus-data}
   grafana-data:
-    name: ${GRAFANA_VOLUME_NAME:-v2-backup-observability-gateway-grafana-data}
+    name: ${GRAFANA_VOLUME_NAME:-veeam-one-monitoring-grafana-data}

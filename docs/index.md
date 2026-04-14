@@ -38,6 +38,23 @@ src/
   exporters/
     jobs.exporter.ts
     repositories.exporter.ts
+docker/
+  Dockerfile
+  docker-compose.yml
+  .env.example
+  prometheus/
+    prometheus.yml
+  grafana/
+    provisioning/
+    dashboards/
+deploy/
+  deploy_docker.sh
+  destroy_docker.sh
+docs/
+  index.md
+  docker.md
+  running.md
+  routes.md
 ```
 
 ## Responsabilidades
@@ -55,4 +72,5 @@ src/
 
 ## Guias Operacionais
 
+- [Docker](/docker)
 - [Dashboard Panorama Geral dos Jobs de Backup - Ajustes 01](/dashboard-panorama-jobs-ajustes-01)
