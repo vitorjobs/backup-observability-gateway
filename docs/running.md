@@ -3,7 +3,7 @@
 ## Variaveis
 
 ```ini
-VEEAM_BASE_URL=https://veeam-one.local:1239
+VEEAM_BASE_URL=https://<ip-ou-dns-do-veeam-one>:1239
 VEEAM_USERNAME=domain\\user
 VEEAM_PASSWORD=change-me
 VEEAM_API_VERSION=v2.2
@@ -22,29 +22,32 @@ Os nomes antigos `VEEAM_ONE_*` continuam aceitos para facilitar migracao.
 
 ```bash
 npm install
+cp .env.example .env
+# Ajuste VEEAM_BASE_URL ou VEEAM_ONE_BASE_URL para o IP/DNS real do Veeam ONE.
 npm run check
 npm test
 npm run build
 npm start
 ```
 
-## Docker
+## Docker Local
 
 ```bash
 cp .env.example .env
+# Ajuste VEEAM_BASE_URL ou VEEAM_ONE_BASE_URL para o IP/DNS real do Veeam ONE.
 cp docker/.env.example docker/.env
 docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build
 ```
 
-Acessos padrao:
+Acessos locais:
 
 - API: `http://localhost:9469`
 - Prometheus: `http://localhost:19090`
 - Grafana: `http://localhost:13000`
 
-No estado atual do `docker/docker-compose.yml`, os containers ativos da stack sao `prometheus` e `grafana`.
+No estado atual do `docker/docker-compose.yml`, os containers ativos da stack sao `veeam-one-api`, `veeam-one-prometheus` e `veeam-one-grafana`.
 
-A API continua sendo raspada fora do Compose por `host.docker.internal:9469`. O bloco do servico `api`, com `network_mode: host`, existe no arquivo, mas esta comentado neste momento.
+A API sobe no Compose escutando `9469` no container e publicada no host pela porta `API_HOST_PORT`, hoje `9469`. O Prometheus raspa a API pela rede interna do Compose em `api:9469`, o Grafana acessa `http://prometheus:9090` dentro da rede do Compose e a API acessa o Veeam ONE pelo `VEEAM_BASE_URL` ou `VEEAM_ONE_BASE_URL` configurado no `.env` raiz.
 
 Para a visao completa da implementacao Docker, incluindo rede, volumes, bind mounts, provisioning e dashboard principal, veja [Docker](/docker).
 
@@ -66,6 +69,32 @@ Depois de subir a API, valide os novos endpoints da Entrega 2:
 curl http://localhost:9469/api/veeam-one/repositories
 curl http://localhost:9469/api/veeam-one/scaleout-repositories
 curl http://localhost:9469/metrics
+```
+
+## Docker Remoto
+
+Para publicar a mesma stack Docker no host remoto:
+
+```bash
+bash deploy/deploy_docker.sh
+```
+
+Defaults atuais do script:
+
+- `REMOTE_USER=suporte`
+- `REMOTE_HOST=10.166.64.12`
+- `REMOTE_DIR=/var/www/appv2`
+
+Acessos remotos padrao:
+
+- API: `http://10.166.64.12:9469`
+- Prometheus: `http://10.166.64.12:19090`
+- Grafana: `http://10.166.64.12:13000`
+
+Para destruir a stack remota:
+
+```bash
+bash deploy/destroy_docker.sh
 ```
 
 ## Documentacao

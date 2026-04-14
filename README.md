@@ -55,7 +55,7 @@ As rotas de repositórios funcionam como proxy fiel do Veeam ONE: query strings 
 ## Variaveis
 
 ```ini
-VEEAM_BASE_URL=https://veeam-one.local:1239
+VEEAM_BASE_URL=https://<ip-ou-dns-do-veeam-one>:1239
 VEEAM_USERNAME=domain\\user
 VEEAM_PASSWORD=change-me
 VEEAM_API_VERSION=v2.2
@@ -75,6 +75,7 @@ Os nomes antigos `VEEAM_ONE_*` tambem sao aceitos para facilitar migracao.
 ```bash
 npm install
 cp .env.example .env
+# Ajuste VEEAM_BASE_URL ou VEEAM_ONE_BASE_URL para o IP/DNS real do Veeam ONE.
 npm run check
 npm test
 npm run build
@@ -85,17 +86,49 @@ npm start
 
 ```bash
 cp .env.example .env
+# Ajuste VEEAM_BASE_URL ou VEEAM_ONE_BASE_URL para o IP/DNS real do Veeam ONE.
 cp docker/.env.example docker/.env
 docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build
 ```
 
-Acessos padrao:
+Acessos locais:
 
 - API: `http://localhost:9469`
 - Prometheus: `http://localhost:19090`
 - Grafana: `http://localhost:13000`
 
-A stack Docker fica isolada em `docker/`. A API usa `network_mode: host` no Compose para alcançar ambientes Veeam ONE que sao acessiveis pelo host, mas nao pela rede bridge padrao do Docker. O Prometheus raspa a API por `host.docker.internal:9469`, configurado em `docker/prometheus/prometheus.yml`.
+A stack Docker fica isolada em `docker/`. A API escuta na porta interna fixa `9469` e publicada no host pela porta `API_HOST_PORT` definida em `docker/.env` (`9469` nesta branch). O Prometheus raspa a API pela rede interna do Compose em `api:9469`, o Grafana consulta o Prometheus em `http://prometheus:9090`, e a API sai do container para o Veeam ONE usando `VEEAM_BASE_URL` ou `VEEAM_ONE_BASE_URL` definidos no `.env` raiz.
+
+Containers ativos na stack:
+
+- `veeam-one-api`
+- `veeam-one-prometheus`
+- `veeam-one-grafana`
+
+## Deploy Remoto
+
+```bash
+bash deploy/deploy_docker.sh
+```
+
+Variaveis principais do deploy remoto:
+
+- `REMOTE_USER` com default `suporte`
+- `REMOTE_HOST` com default `10.166.64.12`
+- `REMOTE_DIR` com default `/var/www/appv2`
+- `SSH_KEY` com default `$HOME/.ssh/id_rsa`
+
+Acessos remotos padrao do script:
+
+- API: `http://10.166.64.12:9469`
+- Prometheus: `http://10.166.64.12:19090`
+- Grafana: `http://10.166.64.12:13000`
+
+Para destruir a stack remota:
+
+```bash
+bash deploy/destroy_docker.sh
+```
 
 As configuracoes do Prometheus e do Grafana ficam em arquivos versionaveis:
 

@@ -1,24 +1,31 @@
 name: ${OBSERVABILITY_STACK_NAME:-veeam-one-monitoring}
 
 services:
-  # api:
-  #   build:
-  #     context: ..
-  #     dockerfile: docker/Dockerfile
-  #   container_name: ${API_CONTAINER_NAME:-veeam-one-api}
-  #   restart: ${API_RESTART_POLICY:-unless-stopped}
-  #   env_file:
-  #     - ../.env
-  #   environment:
-  #     APP_HOST: 0.0.0.0
-  #     APP_PORT: ${APP_PORT:-9469}
-  #   network_mode: host
+  api:
+    image: ${API_IMAGE:-backup-observability-gateway-v2:latest}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: ${API_CONTAINER_NAME:-veeam-one-api}
+    restart: ${API_RESTART_POLICY:-unless-stopped}
+    env_file:
+      - ../.env
+    environment:
+      NODE_ENV: production
+      APP_HOST: 0.0.0.0
+      APP_PORT: 9469
+    ports:
+      - "${API_HOST_PORT:-9469}:9469"
+    networks:
+      - observability
 
   prometheus:
     image: ${PROMETHEUS_IMAGE:-prom/prometheus:latest}
     pull_policy: always
     container_name: ${PROMETHEUS_CONTAINER_NAME:-veeam-one-prometheus}
     restart: ${PROMETHEUS_RESTART_POLICY:-unless-stopped}
+    depends_on:
+      - api
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
@@ -27,8 +34,6 @@ services:
       - "--web.console.templates=/usr/share/prometheus/consoles"
     ports:
       - "${PROMETHEUS_HOST_PORT:-19090}:9090"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
@@ -63,4 +68,6 @@ networks:
 
 volumes:
   prometheus-data:
+    name: ${PROMETHEUS_VOLUME_NAME:-veeam-one-monitoring-prometheus-data}
   grafana-data:
+    name: ${GRAFANA_VOLUME_NAME:-veeam-one-monitoring-grafana-data}
