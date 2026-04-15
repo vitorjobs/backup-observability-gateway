@@ -98,7 +98,7 @@ Acessos locais:
 - Grafana: `http://localhost:13000`
 - VitePress: `http://localhost:4173`
 
-A stack Docker fica isolada em `docker/`. A API escuta na porta interna fixa `9469` e publicada no host pela porta `API_HOST_PORT` definida em `docker/.env` (`9469` nesta branch). O Prometheus raspa a API pela rede interna do Compose em `api:9469`, o Grafana consulta o Prometheus em `http://prometheus:9090`, e a API sai do container para o Veeam ONE usando `VEEAM_BASE_URL` ou `VEEAM_ONE_BASE_URL` definidos no `.env` raiz.
+A stack Docker fica isolada em `docker/`, com uma excecao intencional: a API usa `network_mode: host` para herdar a mesma conectividade do host Linux ate o Veeam ONE e escuta diretamente na porta `API_HOST_PORT` definida em `docker/.env` (`9469` nesta branch). O Prometheus raspa a API pela URL `host.docker.internal:9469`, o Grafana consulta o Prometheus em `http://prometheus:9090`, e a API sai para o Veeam ONE usando `VEEAM_BASE_URL` ou `VEEAM_ONE_BASE_URL` definidos no `.env` raiz.
 
 Containers ativos na stack:
 

@@ -176,4 +176,71 @@ describe("Fastify HTTP routes", () => {
     expect(response.body).toContain("veeam_repository_capacity_bytes");
     expect(response.body).toContain("veeam_sobr_usage_ratio");
   });
+
+  it("coleta os exporters de /metrics em paralelo", async () => {
+    const events: string[] = [];
+    let resolveJobs: (() => void) | undefined;
+    let resolveRepositories: (() => void) | undefined;
+
+    const app = buildApp({
+      backupCopyJobsController: new BackupCopyJobsController({
+        listJobs: async (): Promise<VeeamJobsResponse> => ({ items: [], totalCount: 0 })
+      }),
+      backupToTapeJobsController: new BackupToTapeJobsController({
+        listJobs: async (): Promise<VeeamJobsResponse> => ({ items: [], totalCount: 0 })
+      }),
+      jobsExporter: {
+        contentType: "text/plain; version=0.0.4",
+        collect: async () => {
+          events.push("jobs:start");
+          await new Promise<void>((resolve) => {
+            resolveJobs = () => {
+              events.push("jobs:end");
+              resolve();
+            };
+          });
+
+          return "jobs_metric 1";
+        }
+      } as unknown as JobsExporter,
+      repositoriesController: new RepositoriesController({
+        listRepositories: async () => repositoriesResponse
+      }),
+      repositoriesExporter: {
+        contentType: "text/plain; version=0.0.4",
+        collect: async () => {
+          events.push("repositories:start");
+          await new Promise<void>((resolve) => {
+            resolveRepositories = () => {
+              events.push("repositories:end");
+              resolve();
+            };
+          });
+
+          return "repositories_metric 1";
+        }
+      } as unknown as RepositoriesExporter,
+      scaleoutRepositoriesController: new ScaleoutRepositoriesController({
+        listScaleoutRepositories: async () => scaleoutRepositoriesResponse
+      }),
+      vmBackupJobsController: new VmBackupJobsController({
+        listJobs: async () => veeamResponse
+      })
+    });
+
+    const responsePromise = app.inject({ method: "GET", url: "/metrics" });
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    expect(events).toEqual(["jobs:start", "repositories:start"]);
+
+    resolveJobs?.();
+    resolveRepositories?.();
+
+    const response = await responsePromise;
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toContain("jobs_metric 1");
+    expect(response.body).toContain("repositories_metric 1");
+  });
 });

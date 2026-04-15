@@ -8,16 +8,13 @@ services:
       dockerfile: docker/Dockerfile
     container_name: ${API_CONTAINER_NAME:-veeam-one-api}
     restart: ${API_RESTART_POLICY:-unless-stopped}
+    network_mode: host
     env_file:
       - ../.env
     environment:
       NODE_ENV: production
       APP_HOST: 0.0.0.0
-      APP_PORT: ${APP_PORT:-9469}
-    ports:
-      - "${API_HOST_PORT:-9469}:9469"
-    networks:
-      - observability
+      APP_PORT: ${API_HOST_PORT:-9469}
 
   prometheus:
     image: ${PROMETHEUS_IMAGE:-prom/prometheus:latest}
@@ -25,6 +22,8 @@ services:
     restart: ${PROMETHEUS_RESTART_POLICY:-unless-stopped}
     depends_on:
       - api
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
