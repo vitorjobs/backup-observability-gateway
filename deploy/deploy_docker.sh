@@ -219,7 +219,7 @@ if command -v curl >/dev/null 2>&1; then
   done
 
   if [ "\$PROMETHEUS_OK" != "true" ]; then
-    echo "O Prometheus nao conseguiu raspar a API no alvo interno api:9469."
+    echo "O Prometheus nao conseguiu raspar a API no alvo host.docker.internal:9469."
     exit 1
   fi
 

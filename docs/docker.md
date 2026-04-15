@@ -5,14 +5,14 @@ Documentacao oficial da stack Docker do projeto, consolidando a estrutura da pas
 ## Visao Geral
 
 - Containers ativos na stack local e remota: `veeam-one-api`, `veeam-one-prometheus`, `veeam-one-grafana` e `veeam-one-vitepress`
-- Runtime da API: containerizado no Compose, escutando `9469` e publicado no host como `9469`
+- Runtime da API: containerizado no Compose com `network_mode: host`, escutando diretamente `9469` no host Linux
 - Prometheus publicado no host como `19090`
 - Grafana publicado no host como `13000`
 - VitePress publicado no host como `4173`
 - Dashboard principal provisionado: `Panorama Geral - Execução dos Jobs de Backup`
 - Dashboard relacionado provisionado: `Panorama Geral - Repositórios de Backup`
 - Volumes persistentes: `prometheus-data` e `grafana-data`
-- Rede Docker dedicada: `veeam-one-observability` para `api`, `Prometheus`, `Grafana` e `VitePress`
+- Rede Docker dedicada: `veeam-one-observability` para `Prometheus`, `Grafana` e `VitePress`; a API usa a rede do host
 
 ## Estrutura
 
@@ -82,8 +82,8 @@ Arquivo-fonte editavel versionado em `docs/public/docker/docker-architecture.exc
 ## Rede E Comunicacao
 
 - O `docker/docker-compose.yml` e a fonte de verdade da stack.
-- A API publica `9469` no host e responde internamente na mesma porta.
-- O Prometheus raspa metricas da API em `api:9469`, usando `docker/prometheus/prometheus.yml`.
+- A API usa `network_mode: host`, escuta diretamente `9469` no host Linux e herda a mesma rota de rede usada pelo host para acessar o Veeam ONE.
+- O Prometheus raspa metricas da API em `host.docker.internal:9469`, usando `docker/prometheus/prometheus.yml`.
 - O Grafana consulta o Prometheus em `http://prometheus:9090`, usando o provisioning versionado.
 - O VitePress e buildado com `npm run docs:build` e publicado com `npm run docs:preview` na porta `4173`.
 - A API sai do container para o Veeam ONE usando `VEEAM_BASE_URL` ou `VEEAM_ONE_BASE_URL` do `.env` raiz.

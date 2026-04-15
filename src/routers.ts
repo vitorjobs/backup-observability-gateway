@@ -13,10 +13,10 @@ export function registerRouters(app: FastifyInstance, dependencies: AppDependenc
   );
 
   app.get("/metrics", async (_request, reply) => {
-    const metrics = [
-      await dependencies.jobsExporter.collect(),
-      await dependencies.repositoriesExporter.collect()
-    ].join("\n");
+    const metrics = (await Promise.all([
+      dependencies.jobsExporter.collect(),
+      dependencies.repositoriesExporter.collect()
+    ])).join("\n");
 
     return reply
       .status(200)
